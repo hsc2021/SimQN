@@ -2,11 +2,11 @@
 
 - [SimQN](#simqn)
   - [Overview](#overview)
+  - [Roadmap](#roadmap)
   - [Why choose SimQN?](#why-choose-simqn)
   - [Installation](#installation)
   - [First sight of SimQN](#first-sight-of-simqn)
   - [Get Help](#get-help)
-  - [Roadmap](#roadmap)
   - [Release History](#release-history)
   - [How to contribute?](#how-to-contribute)
   - [License and Authors](#license-and-authors)
@@ -24,6 +24,20 @@ SimQN is a Python3 library for quantum networking simulation. It is designed to 
 
 SimQN provides high performance for large-scale network simulation. SimQN uses [Cython](https://cython.org/) to compile critical codes in C/C++ libraries to boost the evaluation. Also, along with the commonly used quantum state-based physical models, SimQN provides a higher-layer fidelity-based entanglement physical model to reduce the computation overhead and brings convenience for users in evaluation. Last but not least, SimQN provides several network auxiliary models for easily building network topologies, producing routing tables and managing multiple session requests.
 
+## Roadmap
+
+![Roadmap](https://github.com/QNLab-USTC/QuantumNetworkWebsite/blob/main/static/images/simqn_roadmap.png)
+
+- Currently, we are foucsing on developing the 0.2.x version of SimQN, which will include:
+  - Useful network utilities, such as more random topology generators, routing algorithms, and session request generators, real topology adaptors, and Multi-path routing algorithms.
+  - Representative quantum network protocols, such as Q-CAST routing protocol, PS/PU routing protocol, REPS routing protocol for quantum information networks, and CASCADE error correction protocol for QKD networks.
+
+- The follwing functions will be included in the future versions:
+  - Practical quantum network entities, such as quantum repeaters, quantum switches, and quantum benchmarking devices.
+  - Useful network utilities, such as random request traffic generators.
+  - Support for Quantum network stack protocols, incluing KM protocols, routing protocols in QKD networks, and entanglement distribution protocols in quantum information networks.
+  - Realization of easy-to-use GUI for SimQN.
+  
 ## Why choose SimQN?
 
 SimQN is designed as a functional and easy-to-use simulator, like [NS3](https://www.nsnam.org/) in classic networks, it provides numerous functions for anyone who wants to simulate a QKD network or entanglement-based network.
@@ -100,20 +114,6 @@ Here is an example of using SimQN.
     - The [API manual](https://qnlab-ustc.github.io/SimQN/modules.html) shows more detailed information.
 - Welcome to report bugs at [Github](https://github.com/QNLab-USTC/SimQN).
 
-## Roadmap
-
-![Roadmap](https://github.com/QNLab-USTC/QuantumNetworkWebsite/blob/main/static/images/simqn_roadmap.png)
-
-- Currently, we are foucsing on developing the 0.2.x version of SimQN, which will include:
-  - Useful network utilities, such as more random topology generators, routing algorithms, and session request generators, real topology adaptors, and Multi-path routing algorithms.
-  - Representative quantum network protocols, such as Q-CAST routing protocol, PS/PU routing protocol, REPS routing protocol for quantum information networks, and CASCADE error correction protocol for QKD networks.
-
-- The follwing functions will be included in the future versions:
-  - Practical quantum network entities, such as quantum repeaters, quantum switches, and quantum benchmarking devices.
-  - Useful network utilities, such as random request traffic generators.
-  - Support for Quantum network stack protocols, incluing KM protocols, routing protocols in QKD networks, and entanglement distribution protocols in quantum information networks.
-  - Realization of easy-to-use GUI for SimQN.
-
 ## Release History
 
 - v0.2.1(Released 2025.04)
@@ -156,7 +156,7 @@ Other contributors includes:
 * Bing Yang, School of Cyber Science and Technology, University of Science and Technology of China, China.
 * Xumin Gao, School of Cyber Science and Technology, University of Science and Technology of China, China.
 
-## Ciatation
+## Citation
 
 Please cite this paper if you use SimQN in your research.
 
