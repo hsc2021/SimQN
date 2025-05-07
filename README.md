@@ -17,6 +17,8 @@
 [![Pytest](https://github.com/QNLab-USTC/SimQN/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/QNLab-USTC/SimQN/actions/workflows/pytest.yml)
 ![Flake8](https://github.com/QNLab-USTC/SimQN/actions/workflows/flake8.yml/badge.svg)
 
+**[Attention]** Most of existing&future studies in [QNLab](https://qnlab-ustc.com/) are evaluated on SimQN platform, if you would like to follow our work or seek for an easy-to-use quantum network simulator, you cannot miss SimQN! Please check out the following publication for details. **([Link](https://ieeexplore.ieee.org/abstract/document/10024900/) and [PDF](https://infonetlijian.github.io/homepage/PDF_files/2023-%E3%80%90IEEE%20Network%E3%80%91-SimQN_a_Network-layer_Simulator_for_the_Quantum_Network_Investigation.pdf)).**  
+
 Welcome to SimQN's documentation. SimQN is a discrete-event-based network simulation platform for quantum networks.
 SimQN enables large-scale investigations, including QKD protocols, entanglement distributions protocols, and routing algorithms, resource allocation schemas in quantum networks. For example, users can use SimQN to design routing algorithms for better QKD performance. For more information, please refer to the [Documents](https://qnlab-ustc.github.io/SimQN/).
 
@@ -40,9 +42,19 @@ SimQN provides high performance for large-scale network simulation. SimQN uses [
   
 ## Why choose SimQN?
 
-SimQN is designed as a functional and easy-to-use simulator, like [NS3](https://www.nsnam.org/) in classic networks, it provides numerous functions for anyone who wants to simulate a QKD network or entanglement-based network.
+SimQN is designed as a functional and easy-to-use simulator, like [NS3](https://www.nsnam.org/) in classic networks, it provides numerous functions for anyone who wants to simulate a QKD network or entanglement-based network. 
 
-Compared with the existing quantum network simulators, the developers pay more attention to simulation in the network area. Currently, a network simulation can be complicated, as users may have to implement routing algorithms and multiply protocols in different layers to complete a simulation. SimQN aims to break down this problem by providing a modulized quantum node and reusable algorithms and protocols. As a result, users can focus on what they study and reuse other built-in modules. The developers believe this will significantly reduce the burden on our users. As for the physics area, SimQN can also simulate quantum noise, fidelity, and more. Thus, if you focus on the research of the quantum network area, SimQN can be a competitive choice.
+Compared with the existing quantum network simulators, the developers pay more attention to simulation in the network area. Currently, a network simulation can be complicated, as users may have to implement routing algorithms and multiply protocols in different layers to complete a simulation. SimQN aims to break down this problem by providing a modulized quantum node and reusable algorithms and protocols. As a result, users can focus on what they study and reuse other built-in modules. The developers believe this will significantly reduce the burden on our users. As for the physics area, SimQN can also simulate quantum noise, fidelity, and more. Thus, if you focus on the research of the quantum network area, SimQN can be a competitive choice.  
+
+**The main advantages of SimQN can be summarized as follows.**
+- Easy-to-use with Python
+- High-efficiency simulator core
+- Customizable qubit model
+- Built-in quantum internet protocol stack
+- Mainstream quantum applications support, e.g., QKD, quantum networking, and distributed quantum computing (incoming)
+- Periodical updates for academia-related functions and state-of-the-art solutions in the community  (you are welcome to highlight your solution and contribution your code on SimQN)
+- ...
+
 
 ## Installation
 
@@ -143,7 +155,7 @@ Welcome to contribute through Github Issue or Pull Requests. Please refer to the
 
 SimQN is an open-source project under [GPLv3](/LICENSE) license. The authors of the paper includes:
 * Lutong Chen (ertuil), School of Cyber Science and Technology, University of Science and Technology of China, China. elliot.98@outlook.com
-* Jian Li(infonetlijian), School of Cyber Science and Technology, University of Science and Technology of China, China.
+* Jian Li(infonetlijian), School of Cyber Science and Technology, University of Science and Technology of China, China. 
 * Kaiping Xue (kaipingxue), School of Cyber Science and Technology, University of Science and Technology of China, China. xue.kaiping@gmail.com
 * Nenghai Yu, School of Cyber Science and Technology, University of Science and Technology of China, China.
 * Ruidong Li, Institute of Science and Engineering, Kanazawa University, Japan.
@@ -158,7 +170,7 @@ Other contributors includes:
 
 ## Citation
 
-Please cite this paper if you use SimQN in your research.
+Please cite this publication if you use SimQN in your research.
 
 ```Bibtex
 @article{chen2023simqn,
