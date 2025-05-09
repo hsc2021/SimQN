@@ -52,7 +52,7 @@ Compared with the existing quantum network simulators, the developers pay more a
 - Customizable qubit model
 - Built-in quantum internet protocol stack
 - Mainstream quantum applications support, e.g., QKD, quantum networking, and distributed quantum computing (incoming)
-- Periodical updates for academia-related functions and state-of-the-art solutions in the community  (you are welcome to highlight your solution and contribution your code on SimQN)
+- Periodical updates for academia-related functions and state-of-the-art solutions in the community  (you are welcome to highlight your work and contribute your code on SimQN)
 - ...
 
 
