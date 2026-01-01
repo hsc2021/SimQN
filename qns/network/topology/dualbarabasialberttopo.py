@@ -22,6 +22,7 @@ from qns.entity.node.node import QNode
 from typing import Dict, List, Optional, Tuple
 from qns.network.topology import Topology
 from qns.utils.rnd import get_rand, get_weighted_choice
+from qns.network.graphalg.alg import is_connected
 
 
 class DualBarabasiAlbertTopology(Topology):
@@ -37,10 +38,7 @@ class DualBarabasiAlbertTopology(Topology):
         """
         Args:
             nodes_number: the number of Qnodes
-            edges_num1: the number of edges of a new node, must be greater than 0 and less than nodes_number following the \
-            probability `prob`
-            edges_num2: the number of edges of a new node, must be greater than 0 and less than nodes_number following the \
-            probability `1-prob`
+            new_nodes_egdes: the number of edges of a new node, must be greater than 0 and less than nodes_number
         """
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
         self.edges_num1 = edges_num1
@@ -48,6 +46,15 @@ class DualBarabasiAlbertTopology(Topology):
         self.prob = prob
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
+        max_attempts = 100
+        # 尝试构建最多 100 次
+        for _ in range(max_attempts):
+            nl, ll = self.creat_topo()
+            if is_connected(nl, ll):
+                return nl, ll
+        raise RuntimeError(f"Failed to generate a connected topology after {max_attempts} attempts.")
+
+    def creat_topo(self) -> Tuple[List[QNode], List[QuantumChannel]]:
         # check config
         if self.edges_num1 < 1 or self.edges_num2 < 1:
             raise ValueError("edges_num1 and edges_num2 must be greater than 0")

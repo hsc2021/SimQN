@@ -22,6 +22,7 @@ from qns.entity.node.node import QNode
 from typing import Dict, List, Optional, Tuple
 from qns.network.topology import Topology
 from qns.utils.rnd import get_rand
+from qns.network.graphalg.alg import is_connected
 
 
 class ErdosRenyiTopology(Topology):
@@ -43,6 +44,15 @@ class ErdosRenyiTopology(Topology):
         self.generate_prob = generate_prob
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
+        max_attempts = 100
+        # 尝试构建最多 100 次
+        for _ in range(max_attempts):
+            nl, ll = self.creat_topo()
+            if is_connected(nl, ll):
+                return nl, ll
+        raise RuntimeError(f"Failed to generate a connected topology after {max_attempts} attempts.")
+
+    def creat_topo(self) -> Tuple[List[QNode], List[QuantumChannel]]:
         nl: List[QNode] = []
         ll: List[QuantumChannel] = []
         # generate Qnodes

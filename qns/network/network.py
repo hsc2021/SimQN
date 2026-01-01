@@ -15,8 +15,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Callable
 from qns.entity import QNode, QuantumChannel, QuantumMemory, ClassicChannel
+from qns.network.graphalg.alg import create_neighbors_tables, dijkstra, networkdraw, is_connected
 from qns.network.topology import Topology
 from qns.network.route import RouteImpl, DijkstraRouteAlgorithm
 from qns.network.requests import Request
@@ -157,6 +158,31 @@ class QuantumNetwork(object):
         build static route tables for each nodes
         """
         self.route.build(self.nodes, self.qchannels)
+
+    def create_neighbors_tables(self) -> Dict[QNode, List[QNode]]:
+        '''
+        build neighbors_table for each nodes
+        '''
+        self.neighbors_table = create_neighbors_tables(self.nodes, self.qchannels)
+
+    def shortest_path(self, src: QNode, dest: QNode, metric_function: Callable = None):
+        '''
+        find shortest path between src and dest based on the metric_function
+        '''
+        path = dijkstra(src, dest, self.nodes, self.qchannels, metric_function)
+        return path
+
+    def draw(self, filename: str = "quantum_topology.html"):
+        '''
+        draw the network topology
+        '''
+        networkdraw(self.nodes, self.qchannels, filename)
+
+    def network_is_connected(self, nl: List[QNode], ll: List[QuantumChannel]) -> bool:
+        '''
+        whether the network is connected
+        '''
+        return is_connected(nl, ll)
 
     def query_route(self, src: QNode, dest: QNode) -> List[Tuple[float, QNode, List[QNode]]]:
         """

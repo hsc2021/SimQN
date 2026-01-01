@@ -16,7 +16,7 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import time
-from typing import Optional
+from typing import Optional, Type, Dict, Any
 from qns.simulator.ts import Time, default_accuracy
 from qns.simulator.event import Event
 from qns.simulator.pool import DefaultEventPool
@@ -34,12 +34,16 @@ class Simulator(object):
 
     def __init__(self, start_second: float = default_start_second,
                  end_second: float = default_end_second,
-                 accuracy: int = default_accuracy):
+                 accuracy: int = default_accuracy,
+                 pool_cls: Type[DefaultEventPool] = DefaultEventPool,
+                 pool_kwargs: Optional[Dict[str, Any]] = None) -> None:
         """
         Args:
             start_second (float): the start second of the simulation
             end_second (float): the end second of the simulation
             accuracy (int): the number of time slots per second
+            pool_cls (Type[DefaultEventPool]): the event pool class
+            pool_kwargs (Optional[Dict[str, Any]]): the keyword arguments for event pool
         """
         self.accuracy = accuracy
         ts.default_accuracy = accuracy
@@ -48,7 +52,7 @@ class Simulator(object):
         self.te: Time = self.time(sec=end_second)
         self.time_spend: float = 0
 
-        self.event_pool = DefaultEventPool(self.ts, self.te)
+        self.event_pool = pool_cls(self.ts, self.te, **(pool_kwargs or {}))
         self.status = {}
         self.total_events = 0
 

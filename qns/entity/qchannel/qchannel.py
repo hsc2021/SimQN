@@ -33,8 +33,8 @@ class QuantumChannel(Entity):
     """
     QuantumChannel is the channel for transmitting qubit
     """
-    def __init__(self, name: str = None, node_list: List[QNode] = [],
-                 bandwidth: int = 0, delay: Union[float, DelayModel] = 0, drop_rate: float = 0,
+    def __init__(self, name: str = None, node_list: List[QNode] = [], fidelity: float = 0.8,
+                 bandwidth: int = 1, delay: Union[float, DelayModel] = 0, drop_rate: float = 0,
                  max_buffer_size: int = 0, length: float = 0, decoherence_rate: Optional[float] = 0,
                  transfer_error_model_args: dict = {}):
         """
@@ -54,6 +54,7 @@ class QuantumChannel(Entity):
         super().__init__(name=name)
         self.node_list = node_list.copy()
         self.bandwidth = bandwidth
+        self.fidelity = fidelity
         self.delay_model = delay if isinstance(delay, DelayModel) else ConstantDelayModel(delay=delay)
         self.drop_rate = drop_rate
         self.max_buffer_size = max_buffer_size

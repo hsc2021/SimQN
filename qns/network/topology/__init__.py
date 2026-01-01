@@ -25,8 +25,8 @@ from qns.network.topology.waxmantopo import WaxmanTopology
 from qns.network.topology.erdosrenyitopo import ErdosRenyiTopology
 from qns.network.topology.barabasialberttopo import BarabasiAlbertTopology
 from qns.network.topology.dualbarabasialberttopo import DualBarabasiAlbertTopology
+from qns.network.topology.realtopo import AboveNetTopology, AGISTopology, GMLTopology
 
 __all__ = ["Topology", "BasicTopology", "LineTopology",
-           "TreeTopology", "GridTopology", "RandomTopology",
-           "WaxmanTopology", "ErdosRenyiTopology",
-           "BarabasiAlbertTopology", "DualBarabasiAlbertTopology"]
+           "TreeTopology", "GridTopology", "RandomTopology", "WaxmanTopology", "ErdosRenyiTopology", "BarabasiAlbertTopology",
+           "DualBarabasiAlbertTopology", "AboveNetTopology", "AGISTopology", "GMLTopology"]

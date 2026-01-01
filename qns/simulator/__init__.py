@@ -18,5 +18,7 @@
 from qns.simulator.ts import Time, set_default_accuracy
 from qns.simulator.event import Event, func_to_event
 from qns.simulator.simulator import Simulator
+from qns.simulator.pool import DefaultEventPool
+from qns.simulator.hashbucketpool import HashedBucketEventPool
 
-__all__ = ["Time", "set_default_accuracy", "Event", "func_to_event", "Simulator"]
+__all__ = ["Time", "set_default_accuracy", "Event", "func_to_event", "Simulator", "DefaultEventPool", "HashedBucketEventPool"]

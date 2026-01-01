@@ -22,6 +22,7 @@ from qns.entity.node.node import QNode
 from typing import Dict, List, Optional, Tuple
 from qns.network.topology import Topology
 from qns.utils.rnd import get_weighted_choice
+from qns.network.graphalg.alg import is_connected
 
 
 class BarabasiAlbertTopology(Topology):
@@ -43,6 +44,15 @@ class BarabasiAlbertTopology(Topology):
         self.new_nodes_egdes = new_nodes_egdes
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
+        max_attempts = 100
+        # 尝试构建最多 100 次
+        for _ in range(max_attempts):
+            nl, ll = self.creat_topo()
+            if is_connected(nl, ll):
+                return nl, ll
+        raise RuntimeError(f"Failed to generate a connected topology after {max_attempts} attempts.")
+
+    def creat_topo(self) -> Tuple[List[QNode], List[QuantumChannel]]:
         # check config
         if self.new_nodes_egdes < 1 or self.new_nodes_egdes >= self.nodes_number:
             raise ValueError("new_nodes_egdes must be greater than 0 and less than nodes_number")
@@ -64,7 +74,7 @@ class BarabasiAlbertTopology(Topology):
             # deal with boundary conditions
             if self.new_nodes_egdes == 1 and i == 1:
                 n1 = nl[0]
-                nl.append(n1)
+                nl.append(n)
                 qc = QuantumChannel(name=f"l{n1}-{n}", **self.qchannel_args)
                 ll.append(qc)
                 n1.add_qchannel(qc)
