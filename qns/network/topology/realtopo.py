@@ -108,7 +108,6 @@ class GMLTopology(Topology):
 
         edge_blocks = re.findall(r'edge\s*\[(.*?)\]', content, re.DOTALL)
         for block in edge_blocks:
-            # 提取 source 和 target
             src_match = re.search(r'source\s+(\d+)', block)
             tgt_match = re.search(r'target\s+(\d+)', block)
 
