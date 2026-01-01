@@ -128,6 +128,11 @@ Here is an example of using SimQN.
 
 ## Release History
 
+- v0.2.2(Released 2026.01)
+  - *New functions!!!*
+  - Simulator Core: Hash Bucket Based Event Scheduler.
+  - Network Utilities: Add Real Topology Generator, including AboveNetTopology, AGISTopology and Creat Topology From GML File Download From [The Internet Topology Zoo](https://topology-zoo.org/dataset.html). Update the Dijkstra-based Routing Utility.
+
 - v0.2.1(Released 2025.04)
   - *New functions!!!*
   - Network Utilities: Add Random Topology Generator, including ER model, BA model, and dual-BA model.
