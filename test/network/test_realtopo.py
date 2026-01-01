@@ -17,4 +17,4 @@ def test_real_topo():
 
     print(net3.shortest_path(net3.nodes[0], net3.nodes[-1]))
     print(net3.create_neighbors_tables())
-    net3.draw("test_network")
+    net3.draw("test_network.html")
