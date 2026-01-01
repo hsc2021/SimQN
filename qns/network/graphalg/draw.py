@@ -23,9 +23,7 @@ def draw(nl, ll, filename):
 
     for i, node_obj in enumerate(nl):
         new_id = i + 1
-
         name = getattr(node_obj, 'name', f"Node_{new_id}")
-
         raw_apps = getattr(node_obj, 'apps', [])
         processed_apps_labels = []
 
@@ -126,14 +124,39 @@ def draw(nl, ll, filename):
         e['_realLabel'] = e['name']
         e['title'] = f"Name:{e['name']}\nBandwidth:{e['bandwidth']}\nFidelity:{e['fidelity']}"
 
-    table_nodes_data = [{"id": n['id'], "name": n['name'], "apps": ", ".join(n['apps'])} for n in node_list]
-    table_edges_data = [{"name": e['name'], "src": e['src'], "dest": e['dest'], "bandwidth": e['bandwidth'], "fidelity": e['fidelity']} for e in edge_list]
+    # Python List Comprehension: Split into multiple lines
+    table_nodes_data = [
+        {"id": n['id'], "name": n['name'], "apps": ", ".join(n['apps'])}
+        for n in node_list
+    ]
+
+    table_edges_data = [
+        {
+            "name": e['name'],
+            "src": e['src'],
+            "dest": e['dest'],
+            "bandwidth": e['bandwidth'],
+            "fidelity": e['fidelity']
+        }
+        for e in edge_list
+    ]
 
     df_nodes = pd.DataFrame(table_nodes_data)
     df_edges = pd.DataFrame(table_edges_data)
 
-    node_table_html = df_nodes.to_html(classes='custom-table node-table-row', index=False, table_id="nodeTable", border=0)
-    edge_table_html = df_edges.to_html(classes='custom-table edge-table-row', index=False, table_id="edgeTable", border=0)
+    # Pandas to_html: Split arguments
+    node_table_html = df_nodes.to_html(
+        classes='custom-table node-table-row',
+        index=False,
+        table_id="nodeTable",
+        border=0
+    )
+    edge_table_html = df_edges.to_html(
+        classes='custom-table edge-table-row',
+        index=False,
+        table_id="edgeTable",
+        border=0
+    )
 
     physics_options = {
         "physics": {
@@ -155,66 +178,131 @@ def draw(nl, ll, filename):
     js_edges_data = json.dumps(vis_edges)
     js_physics_options = json.dumps(physics_options["physics"])
 
+    # CSS Styles: Expanded for readability and length control
     css_styles = """
     <style>
         * { box-sizing: border-box; }
-        body, html { margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body, html {
+            margin: 0; padding: 0; height: 100vh; width: 100vw;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
         #app-container { display: flex; width: 100%; height: 100%; }
 
-        #left-panel { width: 300px; min-width: 250px; background: #2c3e50; color: #ecf0f1; display: flex; flex-direction: column; border-right: 1px solid #1a252f; z-index: 20; }
+        #left-panel {
+            width: 300px; min-width: 250px; background: #2c3e50; color: #ecf0f1;
+            display: flex; flex-direction: column; border-right: 1px solid #1a252f;
+            z-index: 20;
+        }
         .panel-content { padding: 15px; overflow-y: auto; flex: 1; }
 
-        #center-panel { flex: 1; min-width: 300px; position: relative; background: #fdfdfd; }
+        #center-panel {
+            flex: 1; min-width: 300px; position: relative; background: #fdfdfd;
+        }
         #mynetwork { width: 100%; height: 100%; outline: none; }
 
-        #right-panel { width: 450px; min-width: 200px; background: #f4f6f7; border-left: 1px solid #bdc3c7; display: flex; flex-direction: column; }
+        #right-panel {
+            width: 450px; min-width: 200px; background: #f4f6f7;
+            border-left: 1px solid #bdc3c7; display: flex; flex-direction: column;
+        }
 
-        .resizer { width: 5px; background: #95a5a6; cursor: col-resize; z-index: 10; transition: 0.2s; }
+        .resizer {
+            width: 5px; background: #95a5a6; cursor: col-resize; z-index: 10;
+            transition: 0.2s;
+        }
         .resizer:hover { background: #3498db; }
 
         /* Controls */
-        h3 { border-bottom: 2px solid #34495e; padding-bottom: 8px; margin-top: 0; font-size: 16px; color: #f1c40f; }
-        h4 { color: #1abc9c; margin: 15px 0 5px 0; border-bottom: 1px dashed #7f8c8d; padding-bottom: 3px; font-size: 14px; }
-        label { font-size: 12px; color: #bdc3c7; display: block; margin-top: 8px; }
-        input, select, button { width: 100%; padding: 8px; margin-top: 4px; border-radius: 4px; border: 1px solid #34495e; font-size: 13px; box-sizing: border-box;}
-        button { background: #27ae60; color: white; border: none; cursor: pointer; margin-top: 12px; font-weight: bold; transition: 0.2s; }
+        h3 {
+            border-bottom: 2px solid #34495e; padding-bottom: 8px; margin-top: 0;
+            font-size: 16px; color: #f1c40f;
+        }
+        h4 {
+            color: #1abc9c; margin: 15px 0 5px 0; border-bottom: 1px dashed #7f8c8d;
+            padding-bottom: 3px; font-size: 14px;
+        }
+        label {
+            font-size: 12px; color: #bdc3c7; display: block; margin-top: 8px;
+        }
+        input, select, button {
+            width: 100%; padding: 8px; margin-top: 4px; border-radius: 4px;
+            border: 1px solid #34495e; font-size: 13px; box-sizing: border-box
+        }
+        button {
+            background: #27ae60; color: white; border: none; cursor: pointer;
+            margin-top: 12px; font-weight: bold; transition: 0.2s;
+        }
         button:hover { background: #2ecc71; }
-        .btn-blue { background: #2980b9; } .btn-blue:hover { background: #3498db; }
-        .btn-orange { background: #e67e22; } .btn-orange:hover { background: #d35400; }
+        .btn-blue { background: #2980b9; }
+        .btn-blue:hover { background: #3498db; }
+        .btn-orange { background: #e67e22; }
+        .btn-orange:hover { background: #d35400; }
 
-        .checkbox-container { display: flex; align-items: center; margin-top: 10px; font-size: 13px; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px;}
+        .checkbox-container {
+            display: flex; align-items: center; margin-top: 10px; font-size: 13px;
+            background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px;
+        }
         .checkbox-container input { width: auto; margin-right: 8px; cursor: pointer;}
 
         /* Path Results */
-        #path-results-container { margin-top: 15px; border-top: 1px solid #34495e; padding-top: 10px; }
+        #path-results-container {
+            margin-top: 15px; border-top: 1px solid #34495e; padding-top: 10px;
+        }
         .path-item {
-            background: #34495e;
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            border-left: 4px solid transparent;
+            background: #34495e; padding: 10px; margin-top: 8px; border-radius: 4px;
+            cursor: pointer; font-size: 12px; border-left: 4px solid transparent;
             transition: 0.2s;
         }
         .path-item:hover { background: #3d566e; }
-        .path-active { border-left: 4px solid #e74c3c; background: #2c3e50; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
-        .path-detail { color: #bdc3c7; margin-top: 4px; font-family: monospace; font-size: 11px; word-break: break-all; }
+        .path-active {
+            border-left: 4px solid #e74c3c; background: #2c3e50;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .path-detail {
+            color: #bdc3c7; margin-top: 4px; font-family: monospace; font-size: 11px;
+            word-break: break-all;
+        }
 
         /* Tables */
-        .table-wrapper { flex: 1; overflow: auto; padding: 0; display: flex; flex-direction: column; }
-        .table-header-title { padding: 10px; background: #e9ecef; font-weight: bold; border-bottom: 1px solid #ddd; flex-shrink: 0; }
+        .table-wrapper {
+            flex: 1; overflow: auto; padding: 0; display: flex; flex-direction: column;
+        }
+        .table-header-title {
+            padding: 10px; background: #e9ecef; font-weight: bold;
+            border-bottom: 1px solid #ddd; flex-shrink: 0;
+        }
 
-        table.custom-table { width: 100%; border-collapse: collapse; background: white; font-size: 12px; table-layout: fixed; }
-        table.custom-table th { background: #009879; color: white; padding: 8px; text-align: left; position: sticky; top: 0; z-index: 2; }
-        table.custom-table td { padding: 8px; border-bottom: 1px solid #eee; color: #333; word-wrap: break-word; cursor: pointer; }
+        table.custom-table {
+            width: 100%; border-collapse: collapse; background: white;
+            font-size: 12px; table-layout: fixed;
+        }
+        table.custom-table th {
+            background: #009879; color: white; padding: 8px; text-align: left;
+            position: sticky; top: 0; z-index: 2;
+        }
+        table.custom-table td {
+            padding: 8px; border-bottom: 1px solid #eee; color: #333;
+            word-wrap: break-word; cursor: pointer;
+        }
         table.custom-table tr:hover { background: #fffde7; }
-        table.custom-table tr.selected { background: #fff3cd !important; border-left: 4px solid #FFD700 !important; }
+        table.custom-table tr.selected {
+            background: #fff3cd !important; border-left: 4px solid #FFD700 !important;
+        }
 
         /* Modals */
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
-        .modal-content { background: white; margin: 10% auto; padding: 25px; width: 320px; border-radius: 8px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .close-btn { position: absolute; right: 15px; top: 10px; font-size: 24px; cursor: pointer; color: #aaa; }
+        .modal {
+            display: none; position: fixed; z-index: 100; left: 0; top: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background: white; margin: 10% auto; padding: 25px; width: 320px;
+            border-radius: 8px; position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .close-btn {
+            position: absolute; right: 15px; top: 10px; font-size: 24px;
+            cursor: pointer; color: #aaa;
+        }
         .close-btn:hover { color: #333; }
     </style>
     """
@@ -224,25 +312,33 @@ def draw(nl, ll, filename):
         <div id="left-panel">
             <div class="panel-content">
                 <h3> Control Panel</h3>
-                <div style="font-size:11px; color:#aaa; margin-bottom:10px;">Nodes: {len(nl)} | Edges: {len(ll)}</div>
+                <div style="font-size:11px; color:#aaa; margin-bottom:10px;">
+                    Nodes: {len(nl)} | Edges: {len(ll)}
+                </div>
 
                 <h4> Display</h4>
-                <div class="checkbox-container" onclick="document.getElementById('label-toggle').click()">
+                <div class="checkbox-container"
+                     onclick="document.getElementById('label-toggle').click()">
                     <input type="checkbox" id="label-toggle" onchange="toggleLabels(this)">
                     <span>Show Labels</span>
                 </div>
-                <div class="checkbox-container" onclick="document.getElementById('physics-toggle').click()">
-                    <input type="checkbox" id="physics-toggle" onchange="togglePhysics(this)" checked>
+                <div class="checkbox-container"
+                     onclick="document.getElementById('physics-toggle').click()">
+                    <input type="checkbox" id="physics-toggle"
+                           onchange="togglePhysics(this)" checked>
                     <span>Live Physics</span>
                 </div>
 
                 <h4> Visual Style</h4>
                 <input id="style-name" placeholder="Target Name (e.g. Node_01)">
-                <input type="color" id="style-color" value="#ff0000" style="height:35px; padding:2px; margin-top:5px;">
+                <input type="color" id="style-color" value="#ff0000"
+                       style="height:35px; padding:2px; margin-top:5px;">
                 <button onclick="applyColorByName()">Apply Color</button>
 
                 <h4> Pathfinding (Edge Disjoint)</h4>
-                <div style="font-size:11px; color:#aaa; margin-bottom:5px;">Algorithm: Find Path -> Remove Edges -> Repeat</div>
+                <div style="font-size:11px; color:#aaa; margin-bottom:5px;">
+                    Algorithm: Find Path -> Remove Edges -> Repeat
+                </div>
                 <div style="display:flex; gap:5px;">
                     <input id="path-start" placeholder="Start Node Name/ID">
                     <input id="path-end" placeholder="End Node Name/ID">
@@ -257,11 +353,15 @@ def draw(nl, ll, filename):
                 <label>Max K Paths (Disjoint):</label>
                 <input type="number" id="path-k" value="3" min="1" max="100">
 
-                <button class="btn-orange" onclick="calculateKShortestPaths()"> Calculate Path</button>
+                <button class="btn-orange" onclick="calculateKShortestPaths()">
+                    Calculate Path
+                </button>
                 <button class="btn-blue" onclick="resetGraph()"> Reset View</button>
 
                 <div id="path-results-container">
-                    <div style="font-size:12px; color:#aaa; text-align:center; padding:10px;">Results will appear here</div>
+                    <div style="font-size:12px; color:#aaa; text-align:center; padding:10px;">
+                        Results will appear here
+                    </div>
                 </div>
 
                 <br>
@@ -306,14 +406,18 @@ def draw(nl, ll, filename):
             <input id="new-edge-src" placeholder="Src ID">
             <input id="new-edge-dest" placeholder="Dest ID">
             <input id="new-edge-bandwidth" type="number" placeholder="Bandwidth" value="10">
-            <input id="new-edge-fidelity" type="number" step="0.01" min="0" max="1" placeholder="Fidelity" value="0.99">
+            <input id="new-edge-fidelity" type="number" step="0.01" min="0" max="1"
+                   placeholder="Fidelity" value="0.99">
             <button onclick="addEdge()">Confirm Connect</button>
         </div>
     </div>
     """
 
+    # JS Logic: Formatted to look like code, preventing long lines
     js_logic = f"""
-    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script type="text/javascript"
+            src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js">
+    </script>
     <script type="text/javascript">
         var nodes = new vis.DataSet({js_nodes_data});
         var edges = new vis.DataSet({js_edges_data});
@@ -331,12 +435,19 @@ def draw(nl, ll, filename):
                 color: {{
                     background: '#97C2FC',
                     border: '#2B7CE9',
-                    highlight: {{ background: HIGHLIGHT_COLOR, border: HIGHLIGHT_BORDER }}
+                    highlight: {{
+                        background: HIGHLIGHT_COLOR,
+                        border: HIGHLIGHT_BORDER
+                    }}
                 }}
             }},
             edges: {{
                 font: {{ size: 12, align: 'middle' }},
-                color: {{ color: '#2B7CE9', hover: '#848484', highlight: HIGHLIGHT_COLOR }},
+                color: {{
+                    color: '#2B7CE9',
+                    hover: '#848484',
+                    highlight: HIGHLIGHT_COLOR
+                }},
                 smooth: {{ enabled: true, type: 'dynamic' }}
             }},
             physics: {js_physics_options},
@@ -349,7 +460,9 @@ def draw(nl, ll, filename):
             }}
         }};
 
-        var network = new vis.Network(container, {{ nodes: nodes, edges: edges }}, options);
+        var network = new vis.Network(container,
+                                      {{ nodes: nodes, edges: edges }},
+                                      options);
 
         // --- Helper: Find Node ID by Name or ID ---
         function resolveNodeId(input) {{
@@ -466,7 +579,9 @@ def draw(nl, ll, filename):
             container.innerHTML = "";
 
             if(paths.length === 0) {{
-                container.innerHTML = "<div style='color:#e74c3c; padding:10px; text-align:center'>❌ No Path Found</div>";
+                container.innerHTML =
+                  "<div style='color:#e74c3c; padding:10px; text-align:center'>" +
+                  "❌ No Path Found</div>";
                 return;
             }}
 
@@ -483,10 +598,16 @@ def draw(nl, ll, filename):
 
                 let namePath = p.nodes.map(nid => nodes.get(nid).name).join(" ➝ ");
 
-                div.innerHTML = `<strong>Path ${{i+1}}</strong> <span style="float:right">${{costText}}</span><div class="path-detail">${{namePath}}</div>`;
+                // Multiline Template Literal for readability in Python
+                div.innerHTML = `
+                    <strong>Path ${{i+1}}</strong>
+                    <span style="float:right">${{costText}}</span>
+                    <div class="path-detail">${{namePath}}</div>
+                `;
 
                 div.onclick = function() {{
-                    document.querySelectorAll('.path-item').forEach(el => el.classList.remove('path-active'));
+                    document.querySelectorAll('.path-item').forEach(el =>
+                        el.classList.remove('path-active'));
                     div.classList.add('path-active');
                     highlightPath(p.nodes);
                 }};
@@ -503,28 +624,49 @@ def draw(nl, ll, filename):
             // Highlight Edges
             for(let i=0; i<nodesIds.length-1; i++) {{
                 let u = nodesIds[i], v = nodesIds[i+1];
-                let es = edges.get().filter(e => (e.from===u && e.to===v) || (e.from===v && e.to===u));
-                es.forEach(e => edges.update({{id:e.id, color:{{color: PATH_COLOR}}, width: 3}}));
+                let es = edges.get().filter(e =>
+                    (e.from===u && e.to===v) || (e.from===v && e.to===u)
+                );
+                es.forEach(e => edges.update({{
+                    id:e.id,
+                    color:{{color: PATH_COLOR}},
+                    width: 3
+                }}));
             }}
             // Highlight Nodes
-            nodesIds.forEach(id => nodes.update({{id:id, color:{{background: '#ff7675'}}}}));
+            nodesIds.forEach(id => nodes.update({{
+                id:id,
+                color:{{background: '#ff7675'}}
+            }}));
         }}
 
         function resetGraph() {{
             resetGraphColorOnly();
             network.fit();
-            document.getElementById('path-results-container').innerHTML = "<div style='font-size:12px; color:#aaa; text-align:center; padding:10px;'>Results will appear here</div>";
-            document.querySelectorAll('tr.selected').forEach(r => r.classList.remove('selected'));
+            var emptyMsg = "<div style='font-size:12px; color:#aaa; " +
+                           "text-align:center; padding:10px;'>" +
+                           "Results will appear here</div>";
+            document.getElementById('path-results-container').innerHTML = emptyMsg;
+            document.querySelectorAll('tr.selected').forEach(r =>
+                r.classList.remove('selected'));
         }}
 
         function resetGraphColorOnly() {{
-            edges.update(edges.getIds().map(id => ({{id:id, color:{{color:'#2B7CE9', highlight: HIGHLIGHT_COLOR}}, width:1}})));
+            edges.update(edges.getIds().map(id => ({{
+                id:id,
+                color:{{color:'#2B7CE9', highlight: HIGHLIGHT_COLOR}},
+                width:1
+            }})));
+
             nodes.update(nodes.getIds().map(id => ({{
                 id:id,
                 color: {{
                     background:'#97C2FC',
                     border:'#2B7CE9',
-                    highlight: {{ background: HIGHLIGHT_COLOR, border: HIGHLIGHT_BORDER }}
+                    highlight: {{
+                        background: HIGHLIGHT_COLOR,
+                        border: HIGHLIGHT_BORDER
+                    }}
                 }}
             }})));
         }}
@@ -538,7 +680,8 @@ def draw(nl, ll, filename):
             for (var i = 1; i < rows.length; i++) {{
                 rows[i].onclick = function() {{
                     var wasSelected = this.classList.contains('selected');
-                    document.querySelectorAll('tr.selected').forEach(r => r.classList.remove('selected'));
+                    document.querySelectorAll('tr.selected').forEach(r =>
+                        r.classList.remove('selected'));
 
                     if (wasSelected) {{
                         network.unselectAll();
@@ -565,8 +708,12 @@ def draw(nl, ll, filename):
         // --- UI Utils ---
         function toggleLabels(checkbox) {{
             var show = checkbox.checked;
-            nodes.update(nodes.get().map(n => ({{ id: n.id, label: show ? n._realLabel : " " }})));
-            edges.update(edges.get().map(e => ({{ id: e.id, label: show ? e._realLabel : " " }})));
+            nodes.update(nodes.get().map(n =>
+                ({{ id: n.id, label: show ? n._realLabel : " " }})
+            ));
+            edges.update(edges.get().map(e =>
+                ({{ id: e.id, label: show ? e._realLabel : " " }})
+            ));
         }}
 
         function togglePhysics(checkbox) {{
@@ -579,21 +726,38 @@ def draw(nl, ll, filename):
             var color = document.getElementById('style-color').value;
             var targetNode = nodes.get().find(n => n.name === nameInput);
             if(targetNode) {{
-                nodes.update({{id: targetNode.id, color: {{background: color, border: color, highlight:{{background: HIGHLIGHT_COLOR, border: HIGHLIGHT_BORDER}}}}}});
+                nodes.update({{
+                    id: targetNode.id,
+                    color: {{
+                        background: color,
+                        border: color,
+                        highlight:{{
+                            background: HIGHLIGHT_COLOR,
+                            border: HIGHLIGHT_BORDER
+                        }}
+                    }}
+                }});
                 return;
             }}
             alert("Node not found: " + nameInput);
         }}
 
         function makeResizable(resizer, side) {{
-            const l = document.getElementById('left-panel'), r = document.getElementById('right-panel'), c = document.getElementById('app-container');
+            const l = document.getElementById('left-panel');
+            const r = document.getElementById('right-panel');
+            const c = document.getElementById('app-container');
+
             resizer.addEventListener('mousedown', function(e) {{
                 e.preventDefault();
                 document.addEventListener('mousemove', resize);
                 document.addEventListener('mouseup', stopResize);
                 function resize(ev) {{
-                    if(side==='left') l.style.width = Math.max(150, Math.min(500, ev.clientX)) + 'px';
-                    else r.style.width = Math.max(150, Math.min(800, c.offsetWidth - ev.clientX)) + 'px';
+                    if(side==='left') {{
+                        l.style.width = Math.max(150, Math.min(500, ev.clientX))+'px';
+                    }} else {{
+                        let w = c.offsetWidth - ev.clientX;
+                        r.style.width = Math.max(150, Math.min(800, w))+'px';
+                    }}
                 }}
                 function stopResize() {{
                     document.removeEventListener('mousemove', resize);
@@ -605,16 +769,30 @@ def draw(nl, ll, filename):
         makeResizable(document.getElementById('resizer-right'), 'right');
 
         // Modal Logic
-        function openModal(id) {{ document.getElementById(id).style.display = 'block'; }}
-        function closeModal(id) {{ document.getElementById(id).style.display = 'none'; }}
-        window.onclick = function(event) {{ if (event.target.classList.contains('modal')) event.target.style.display = "none"; }}
+        function openModal(id) {{
+            document.getElementById(id).style.display = 'block';
+        }}
+        function closeModal(id) {{
+            document.getElementById(id).style.display = 'none';
+        }}
+        window.onclick = function(event) {{
+            if (event.target.classList.contains('modal'))
+                event.target.style.display = "none";
+        }}
 
         function addNode() {{
             let id = parseInt(document.getElementById('new-node-id').value);
             let name = document.getElementById('new-node-name').value;
             let apps = document.getElementById('new-node-apps').value;
             if(!id || !name) return alert('ID and Name required');
-            nodes.add({{id:id, label: " ", _realLabel: name, name: name, title: "ID:"+id+" NAME:"+name, apps: apps.split(',')}});
+            nodes.add({{
+                id:id,
+                label: " ",
+                _realLabel: name,
+                name: name,
+                title: "ID:"+id+" NAME:"+name,
+                apps: apps.split(',')
+            }});
             closeModal('nodeModal');
         }}
 
@@ -624,13 +802,22 @@ def draw(nl, ll, filename):
             let bw = parseFloat(document.getElementById('new-edge-bandwidth').value);
             let fid = parseFloat(document.getElementById('new-edge-fidelity').value);
             if(!u || !v) return alert('Source and Dest IDs required');
-            edges.add({{from:u, to:v, bandwidth: bw, fidelity: fid, name: "Link_"+u+"_"+v, title: "Manually Added"}});
+            edges.add({{
+                from:u, to:v, bandwidth: bw, fidelity: fid,
+                name: "Link_"+u+"_"+v, title: "Manually Added"
+            }});
             closeModal('edgeModal');
         }}
     </script>
     """
 
+    full_html = (
+        "<!DOCTYPE html><html><head>"
+        "<meta charset='utf-8'><title>Quantum Network Visualizer</title>"
+        f"{css_styles}</head><body>{html_structure}{js_logic}</body></html>"
+    )
+
     with open(filename, "w", encoding="utf-8") as f:
-        f.write(f"<!DOCTYPE html><html><head><meta charset='utf-8'><title>Quantum Network Visualizer</title>{css_styles}</head><body>{html_structure}{js_logic}</body></html>")
+        f.write(full_html)
 
     webbrowser.open('file://' + os.path.realpath(filename))
