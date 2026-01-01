@@ -81,7 +81,8 @@ def min_hop_metric_funcation(channel: QuantumChannel):
     return 1
 
 
-def dijkstra(src: QNode, dest: QNode, nl: List[QNode], ll: List[QuantumChannel], metric_function: Callable = min_hop_metric_funcation):
+def dijkstra(src: QNode, dest: QNode, nl: List[QNode], ll: List[QuantumChannel],
+             metric_function: Callable = min_hop_metric_funcation):
     """
     dijkstra algorithm.
     Args:
