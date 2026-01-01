@@ -3,7 +3,7 @@ import webbrowser
 import os
 import json
 import copy
-import networkx as nx
+import math
 
 
 def draw(nl, ll, filename):
@@ -94,22 +94,20 @@ def draw(nl, ll, filename):
             "fidelity": fid
         })
 
-    G_layout = nx.Graph()
-    for n in node_list:
-        G_layout.add_node(n['id'])
-    for e in edge_list:
-        G_layout.add_edge(e['src'], e['dest'])
-
-    pos = nx.spring_layout(G_layout, k=0.9, iterations=100, seed=42)
-
+    # --- REPLACED NETWORKX WITH SIMPLE CIRCULAR LAYOUT ---
     vis_nodes = copy.deepcopy(node_list)
     vis_edges = copy.deepcopy(edge_list)
 
-    for n in vis_nodes:
-        if n['id'] in pos:
-            x, y = pos[n['id']]
-            n['x'] = float(x) * 1000
-            n['y'] = float(y) * 1000
+    node_count = len(vis_nodes)
+    radius = 1000  # Visual scale for initial circle
+
+    for i, n in enumerate(vis_nodes):
+        # Calculate angle for circular distribution
+        angle = 2 * math.pi * i / max(1, node_count)
+
+        # Assign initial coordinates
+        n['x'] = radius * math.cos(angle)
+        n['y'] = radius * math.sin(angle)
 
         n['label'] = " "
         n['_realLabel'] = n['name']
@@ -122,7 +120,11 @@ def draw(nl, ll, filename):
         e['to'] = e['dest']
         e['label'] = " "
         e['_realLabel'] = e['name']
-        e['title'] = f"Name:{e['name']}\nBandwidth:{e['bandwidth']}\nFidelity:{e['fidelity']}"
+        e['title'] = (
+            f"Name:{e['name']}\n"
+            f"Bandwidth:{e['bandwidth']}\n"
+            f"Fidelity:{e['fidelity']}"
+        )
 
     # Python List Comprehension: Split into multiple lines
     table_nodes_data = [
@@ -178,7 +180,7 @@ def draw(nl, ll, filename):
     js_edges_data = json.dumps(vis_edges)
     js_physics_options = json.dumps(physics_options["physics"])
 
-    # CSS Styles: Expanded for readability and length control
+    # CSS Styles
     css_styles = """
     <style>
         * { box-sizing: border-box; }
@@ -413,7 +415,7 @@ def draw(nl, ll, filename):
     </div>
     """
 
-    # JS Logic: Formatted to look like code, preventing long lines
+    # JS Logic
     js_logic = f"""
     <script type="text/javascript"
             src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js">
