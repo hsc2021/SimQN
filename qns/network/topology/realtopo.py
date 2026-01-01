@@ -11,7 +11,8 @@ class AboveNetTopology(Topology):
     """
     AboveNet Topology class for quantum networks.
     """
-    def __init__(self, nodes_number=10, nodes_apps: List[Application] = [], qchannel_args: Dict = {}, cchannel_args: Dict = {}, memory_args: Optional[List[Dict]] = {}):
+    def __init__(self, nodes_number=10, nodes_apps: List[Application] = [], qchannel_args: Dict = {}, cchannel_args: Dict = {},
+                 memory_args: Optional[List[Dict]] = {}):
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
@@ -44,7 +45,8 @@ class AGISTopology(Topology):
     """
     AGIST Topology class for quantum networks.
     """
-    def __init__(self, nodes_number=10, nodes_apps: List[Application] = [], qchannel_args: Dict = {}, cchannel_args: Dict = {}, memory_args: Optional[List[Dict]] = {}):
+    def __init__(self, nodes_number=10, nodes_apps: List[Application] = [], qchannel_args: Dict = {}, cchannel_args: Dict = {},
+                 memory_args: Optional[List[Dict]] = {}):
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
