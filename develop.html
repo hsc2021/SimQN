@@ -14,7 +14,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=360bc84d"></script>
-      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -124,6 +124,12 @@ pip3<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </
 </pre></div>
 </div>
 <p>To build document website, use the command:</p>
+<div class="highlight-bash notranslate">
+    <div class="highlight">
+        <pre><span></span>cd</span> docs
+make html</pre>
+    </div>
+</div>
 <p>Now, the compiled static website is built. Our documents is hosted on the <cite>gh-pages</cite> branch. Use the following command to publish new documents:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>subtree<span class="w"> </span>push<span class="w"> </span>--prefix<span class="w"> </span>docs/build/html<span class="w"> </span>origin<span class="w"> </span>gh-pages
 </pre></div>

@@ -13,7 +13,7 @@
       <script src="../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../_static/documentation_options.js?v=360bc84d"></script>
-      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -90,8 +90,9 @@
 <span class="c1">#    You should have received a copy of the GNU General Public License</span>
 <span class="c1">#    along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Callable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qns.entity</span><span class="w"> </span><span class="kn">import</span> <span class="n">QNode</span><span class="p">,</span> <span class="n">QuantumChannel</span><span class="p">,</span> <span class="n">QuantumMemory</span><span class="p">,</span> <span class="n">ClassicChannel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qns.network.graphalg.alg</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_neighbors_tables</span><span class="p">,</span> <span class="n">dijkstra</span><span class="p">,</span> <span class="n">networkdraw</span><span class="p">,</span> <span class="n">is_connected</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qns.network.topology</span><span class="w"> </span><span class="kn">import</span> <span class="n">Topology</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qns.network.route</span><span class="w"> </span><span class="kn">import</span> <span class="n">RouteImpl</span><span class="p">,</span> <span class="n">DijkstraRouteAlgorithm</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qns.network.requests</span><span class="w"> </span><span class="kn">import</span> <span class="n">Request</span>
@@ -260,6 +261,43 @@
 <span class="sd">        build static route tables for each nodes</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qchannels</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuantumNetwork.create_neighbors_tables">
+<a class="viewcode-back" href="../../../qns.network.html#qns.network.network.QuantumNetwork.create_neighbors_tables">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_neighbors_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">QNode</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">QNode</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        build neighbors_table for each nodes</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neighbors_table</span> <span class="o">=</span> <span class="n">create_neighbors_tables</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qchannels</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuantumNetwork.shortest_path">
+<a class="viewcode-back" href="../../../qns.network.html#qns.network.network.QuantumNetwork.shortest_path">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">shortest_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">QNode</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="n">QNode</span><span class="p">,</span> <span class="n">metric_function</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        find shortest path between src and dest based on the metric_function</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">dijkstra</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qchannels</span><span class="p">,</span> <span class="n">metric_function</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">path</span></div>
+
+
+<div class="viewcode-block" id="QuantumNetwork.draw">
+<a class="viewcode-back" href="../../../qns.network.html#qns.network.network.QuantumNetwork.draw">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;quantum_topology.html&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        draw the network topology</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">networkdraw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qchannels</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuantumNetwork.network_is_connected">
+<a class="viewcode-back" href="../../../qns.network.html#qns.network.network.QuantumNetwork.network_is_connected">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">network_is_connected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nl</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">QNode</span><span class="p">],</span> <span class="n">ll</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">QuantumChannel</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        whether the network is connected</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">is_connected</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">ll</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="QuantumNetwork.query_route">

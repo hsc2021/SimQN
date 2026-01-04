@@ -13,7 +13,7 @@
       <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../../../../_static/documentation_options.js?v=360bc84d"></script>
-      <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
       <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -96,6 +96,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qns.network.topology</span><span class="w"> </span><span class="kn">import</span> <span class="n">Topology</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">qns.utils.rnd</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_randint</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qns.network.graphalg.alg</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_connected</span>
 
 
 <div class="viewcode-block" id="RandomTopology">
@@ -118,6 +119,18 @@
 <div class="viewcode-block" id="RandomTopology.build">
 <a class="viewcode-back" href="../../../../qns.network.topology.html#qns.network.RandomTopology.build">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">QNode</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">QuantumChannel</span><span class="p">]]:</span>
+        <span class="n">max_attempts</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="c1"># 尝试构建最多 100 次</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_attempts</span><span class="p">):</span>
+            <span class="n">nl</span><span class="p">,</span> <span class="n">ll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">creat_topo</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">is_connected</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">ll</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">nl</span><span class="p">,</span> <span class="n">ll</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to generate a connected topology after </span><span class="si">{</span><span class="n">max_attempts</span><span class="si">}</span><span class="s2"> attempts.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RandomTopology.creat_topo">
+<a class="viewcode-back" href="../../../../qns.network.topology.html#qns.network.RandomTopology.creat_topo">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">creat_topo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">QNode</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">QuantumChannel</span><span class="p">]]:</span>
         <span class="n">nl</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">QNode</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">ll</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">QuantumChannel</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 

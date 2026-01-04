@@ -14,7 +14,7 @@
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=360bc84d"></script>
-      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -374,12 +374,16 @@
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.add_qchannel"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.add_qchannel()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.add_request"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.add_request()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.build_route"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.build_route()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.create_neighbors_tables"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.create_neighbors_tables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.draw"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.draw()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.get_cchannel"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.get_cchannel()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.get_node"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.get_node()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.get_qchannel"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.get_qchannel()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.install"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.install()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.network_is_connected"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.network_is_connected()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.query_route"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.query_route()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.random_requests"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.random_requests()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.network.QuantumNetwork.shortest_path"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.shortest_path()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -389,8 +393,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="qns.network.html#module-qns.network">Module contents</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.BarabasiAlbertTopology"><code class="docutils literal notranslate"><span class="pre">BarabasiAlbertTopology</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.BarabasiAlbertTopology.build"><code class="docutils literal notranslate"><span class="pre">BarabasiAlbertTopology.build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.AGISTopology"><code class="docutils literal notranslate"><span class="pre">AGISTopology</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.AGISTopology.build"><code class="docutils literal notranslate"><span class="pre">AGISTopology.build()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.AboveNetTopology"><code class="docutils literal notranslate"><span class="pre">AboveNetTopology</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.AboveNetTopology.build"><code class="docutils literal notranslate"><span class="pre">AboveNetTopology.build()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.BasicTopology"><code class="docutils literal notranslate"><span class="pre">BasicTopology</span></code></a><ul>
@@ -403,12 +411,8 @@
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.DijkstraRouteAlgorithm.query"><code class="docutils literal notranslate"><span class="pre">DijkstraRouteAlgorithm.query()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.DualBarabasiAlbertTopology"><code class="docutils literal notranslate"><span class="pre">DualBarabasiAlbertTopology</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.DualBarabasiAlbertTopology.build"><code class="docutils literal notranslate"><span class="pre">DualBarabasiAlbertTopology.build()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.ErdosRenyiTopology"><code class="docutils literal notranslate"><span class="pre">ErdosRenyiTopology</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.ErdosRenyiTopology.build"><code class="docutils literal notranslate"><span class="pre">ErdosRenyiTopology.build()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.GMLTopology"><code class="docutils literal notranslate"><span class="pre">GMLTopology</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.GMLTopology.build"><code class="docutils literal notranslate"><span class="pre">GMLTopology.build()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.GridTopology"><code class="docutils literal notranslate"><span class="pre">GridTopology</span></code></a><ul>
@@ -428,16 +432,21 @@
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.add_qchannel"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.add_qchannel()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.add_request"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.add_request()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.build_route"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.build_route()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.create_neighbors_tables"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.create_neighbors_tables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.draw"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.draw()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.get_cchannel"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.get_cchannel()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.get_node"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.get_node()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.get_qchannel"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.get_qchannel()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.install"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.install()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.network_is_connected"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.network_is_connected()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.query_route"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.query_route()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.random_requests"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.random_requests()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.QuantumNetwork.shortest_path"><code class="docutils literal notranslate"><span class="pre">QuantumNetwork.shortest_path()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.RandomTopology"><code class="docutils literal notranslate"><span class="pre">RandomTopology</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.RandomTopology.build"><code class="docutils literal notranslate"><span class="pre">RandomTopology.build()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.RandomTopology.creat_topo"><code class="docutils literal notranslate"><span class="pre">RandomTopology.creat_topo()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.Request"><code class="docutils literal notranslate"><span class="pre">Request</span></code></a></li>
@@ -457,8 +466,13 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.WaxmanTopology"><code class="docutils literal notranslate"><span class="pre">WaxmanTopology</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.WaxmanTopology.build"><code class="docutils literal notranslate"><span class="pre">WaxmanTopology.build()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.network.html#qns.network.WaxmanTopology.creat_topo"><code class="docutils literal notranslate"><span class="pre">WaxmanTopology.creat_topo()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.create_neighbors_tables"><code class="docutils literal notranslate"><span class="pre">create_neighbors_tables()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.dijkstra"><code class="docutils literal notranslate"><span class="pre">dijkstra()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.is_connected"><code class="docutils literal notranslate"><span class="pre">is_connected()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="qns.network.html#qns.network.networkdraw"><code class="docutils literal notranslate"><span class="pre">networkdraw()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -521,10 +535,21 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="qns.simulator.html#module-qns.simulator">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="qns.simulator.html#qns.simulator.DefaultEventPool"><code class="docutils literal notranslate"><span class="pre">DefaultEventPool</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="qns.simulator.html#qns.simulator.DefaultEventPool.add_event"><code class="docutils literal notranslate"><span class="pre">DefaultEventPool.add_event()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.simulator.html#qns.simulator.DefaultEventPool.current_time"><code class="docutils literal notranslate"><span class="pre">DefaultEventPool.current_time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.simulator.html#qns.simulator.DefaultEventPool.next_event"><code class="docutils literal notranslate"><span class="pre">DefaultEventPool.next_event()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="qns.simulator.html#qns.simulator.Event"><code class="docutils literal notranslate"><span class="pre">Event</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="qns.simulator.html#qns.simulator.Event.cancel"><code class="docutils literal notranslate"><span class="pre">Event.cancel()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.simulator.html#qns.simulator.Event.invoke"><code class="docutils literal notranslate"><span class="pre">Event.invoke()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="qns.simulator.html#qns.simulator.Event.is_canceled"><code class="docutils literal notranslate"><span class="pre">Event.is_canceled</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="qns.simulator.html#qns.simulator.HashedBucketEventPool"><code class="docutils literal notranslate"><span class="pre">HashedBucketEventPool</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="qns.simulator.html#qns.simulator.HashedBucketEventPool.add_event"><code class="docutils literal notranslate"><span class="pre">HashedBucketEventPool.add_event()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="qns.simulator.html#qns.simulator.HashedBucketEventPool.next_event"><code class="docutils literal notranslate"><span class="pre">HashedBucketEventPool.next_event()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="qns.simulator.html#qns.simulator.Simulator"><code class="docutils literal notranslate"><span class="pre">Simulator</span></code></a><ul>
