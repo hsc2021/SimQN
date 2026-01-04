@@ -1,0 +1,220 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qns.network.topology.dualbarabasialberttopo &mdash; SimQN 0.1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SimQN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Users' Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../develop.html">Develop Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">qns</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SimQN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qns.network.topology.dualbarabasialberttopo</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for qns.network.topology.dualbarabasialberttopo</h1><div class="highlight"><pre>
+<span></span><span class="c1">#    SimQN: a discrete-event simulator for the quantum networks</span>
+<span class="c1">#    Copyright (C) 2021-2022 Lutong Chen, Jian Li, Kaiping Xue</span>
+<span class="c1">#    University of Science and Technology of China, USTC.</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#    (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU General Public License</span>
+<span class="c1">#    along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qns.entity.node.app</span><span class="w"> </span><span class="kn">import</span> <span class="n">Application</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qns.entity.qchannel.qchannel</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumChannel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qns.entity.node.node</span><span class="w"> </span><span class="kn">import</span> <span class="n">QNode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qns.network.topology</span><span class="w"> </span><span class="kn">import</span> <span class="n">Topology</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qns.utils.rnd</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rand</span><span class="p">,</span> <span class="n">get_weighted_choice</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qns.network.graphalg.alg</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_connected</span>
+
+
+<div class="viewcode-block" id="DualBarabasiAlbertTopology">
+<a class="viewcode-back" href="../../../../qns.network.topology.html#qns.network.topology.dualbarabasialberttopo.DualBarabasiAlbertTopology">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DualBarabasiAlbertTopology</span><span class="p">(</span><span class="n">Topology</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DualBarabasiAlbertTopology is a random topology generator based on the Dual Barabasi-Albert model.</span>
+<span class="sd">    Each new QNode added has either `edges_num1` or `edges_num2` edges to existing QNodes.</span>
+<span class="sd">    The probability of a new QNode connecting to an existing QNode is proportional to the degree of the existing QNode.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes_number</span><span class="p">,</span> <span class="n">edges_num1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">edges_num2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">prob</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">nodes_apps</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Application</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+                 <span class="n">qchannel_args</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{},</span> <span class="n">cchannel_args</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{},</span>
+                 <span class="n">memory_args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            nodes_number: the number of Qnodes</span>
+<span class="sd">            new_nodes_egdes: the number of edges of a new node, must be greater than 0 and less than nodes_number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nodes_number</span><span class="p">,</span> <span class="n">nodes_apps</span><span class="p">,</span> <span class="n">qchannel_args</span><span class="p">,</span> <span class="n">cchannel_args</span><span class="p">,</span> <span class="n">memory_args</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges_num1</span> <span class="o">=</span> <span class="n">edges_num1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges_num2</span> <span class="o">=</span> <span class="n">edges_num2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prob</span> <span class="o">=</span> <span class="n">prob</span>
+
+<div class="viewcode-block" id="DualBarabasiAlbertTopology.build">
+<a class="viewcode-back" href="../../../../qns.network.topology.html#qns.network.topology.dualbarabasialberttopo.DualBarabasiAlbertTopology.build">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">QNode</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">QuantumChannel</span><span class="p">]]:</span>
+        <span class="n">max_attempts</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="c1"># 尝试构建最多 100 次</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_attempts</span><span class="p">):</span>
+            <span class="n">nl</span><span class="p">,</span> <span class="n">ll</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">creat_topo</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">is_connected</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">ll</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">nl</span><span class="p">,</span> <span class="n">ll</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to generate a connected topology after </span><span class="si">{</span><span class="n">max_attempts</span><span class="si">}</span><span class="s2"> attempts.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DualBarabasiAlbertTopology.creat_topo">
+<a class="viewcode-back" href="../../../../qns.network.topology.html#qns.network.topology.dualbarabasialberttopo.DualBarabasiAlbertTopology.creat_topo">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">creat_topo</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">QNode</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="n">QuantumChannel</span><span class="p">]]:</span>
+        <span class="c1"># check config</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_num1</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_num2</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;edges_num1 and edges_num2 must be greater than 0&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_num1</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes_number</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_num2</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes_number</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;edges_num1 and edges_num2 must be less than nodes_number&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">prob</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">prob</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;prob must be in [0, 1]&quot;</span><span class="p">)</span>
+        <span class="n">nl</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">QNode</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ll</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">QuantumChannel</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># generate initial QNodes and QuantumChannels</span>
+        <span class="n">node_num</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edges_num1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_num2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">node_num</span><span class="p">):</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">QNode</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">nl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">initial_edges</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">combinations</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span> <span class="ow">in</span> <span class="n">initial_edges</span><span class="p">:</span>
+            <span class="n">qc</span> <span class="o">=</span> <span class="n">QuantumChannel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;l</span><span class="si">{</span><span class="n">n1</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">n2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">qchannel_args</span><span class="p">)</span>
+            <span class="n">ll</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+            <span class="n">n1</span><span class="o">.</span><span class="n">add_qchannel</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+            <span class="n">n2</span><span class="o">.</span><span class="n">add_qchannel</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+        <span class="c1"># generate new QNodes following dual Barabasi-Albert model</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">node_num</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes_number</span><span class="p">):</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">QNode</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">get_rand</span><span class="p">()</span>
+            <span class="c1"># deal with boundary conditions</span>
+            <span class="k">if</span> <span class="n">node_num</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">n1</span> <span class="o">=</span> <span class="n">nl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">nl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n1</span><span class="p">)</span>
+                <span class="n">qc</span> <span class="o">=</span> <span class="n">QuantumChannel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;l</span><span class="si">{</span><span class="n">n1</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">qchannel_args</span><span class="p">)</span>
+                <span class="n">ll</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+                <span class="n">n1</span><span class="o">.</span><span class="n">add_qchannel</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+                <span class="n">n</span><span class="o">.</span><span class="n">add_qchannel</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">prob</span><span class="p">:</span>
+                <span class="n">weighted_choice</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">n_i</span><span class="o">.</span><span class="n">qchannels</span><span class="p">)</span> <span class="k">for</span> <span class="n">n_i</span> <span class="ow">in</span> <span class="n">nl</span><span class="p">]</span>
+                <span class="n">choice_list</span> <span class="o">=</span> <span class="n">get_weighted_choice</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">weighted_choice</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_num1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">weighted_choice</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">n_i</span><span class="o">.</span><span class="n">qchannels</span><span class="p">)</span> <span class="k">for</span> <span class="n">n_i</span> <span class="ow">in</span> <span class="n">nl</span><span class="p">]</span>
+                <span class="n">choice_list</span> <span class="o">=</span> <span class="n">get_weighted_choice</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">weighted_choice</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges_num2</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n_i</span> <span class="ow">in</span> <span class="n">choice_list</span><span class="p">:</span>
+                <span class="n">qc</span> <span class="o">=</span> <span class="n">QuantumChannel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;l</span><span class="si">{</span><span class="n">n_i</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">qchannel_args</span><span class="p">)</span>
+                <span class="n">ll</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+                <span class="n">n</span><span class="o">.</span><span class="n">add_qchannel</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+                <span class="n">n_i</span><span class="o">.</span><span class="n">add_qchannel</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+            <span class="n">nl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="c1"># QNode configuration</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_apps</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_add_memories</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nl</span><span class="p">,</span> <span class="n">ll</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Elliot Chen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,21 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quantum channel: the link to transmit qubits &mdash; SimQN 0.1.3 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=360bc84d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> SimQN
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SimQN
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -83,10 +88,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="tutorials.html">Tutorials</a> &raquo;</li>
-          <li><a href="tutorials.entity.html">Entities in quantum networks</a> &raquo;</li>
-      <li>Quantum channel: the link to transmit qubits</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+          <li class="breadcrumb-item"><a href="tutorials.entity.html">Entities in quantum networks</a></li>
+      <li class="breadcrumb-item active">Quantum channel: the link to transmit qubits</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/tutorials.entity.qchannel.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -97,7 +102,7 @@
            <div itemprop="articleBody">
              
   <section id="quantum-channel-the-link-to-transmit-qubits">
-<h1>Quantum channel: the link to transmit qubits<a class="headerlink" href="#quantum-channel-the-link-to-transmit-qubits" title="Permalink to this headline"></a></h1>
+<h1>Quantum channel: the link to transmit qubits<a class="headerlink" href="#quantum-channel-the-link-to-transmit-qubits" title="Link to this heading"></a></h1>
 <p>Quantum channels can transmit a <code class="docutils literal notranslate"><span class="pre">QuantumModel</span></code> (qubit) from a node to another.
 It has the following attributions:</p>
 <ul class="simple">
@@ -111,8 +116,8 @@ It has the following attributions:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">transfer_error_model_args</span></code>: other attributions for the error model.</p></li>
 </ul>
 <p>It is easy to generate a quantum channel:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qns.entity.node.node</span> <span class="kn">import</span> <span class="n">QNode</span>
-<span class="kn">from</span> <span class="nn">qns.entity.qchannel.qchannel</span> <span class="kn">import</span> <span class="n">QuantumChannel</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qns.entity.node.node</span><span class="w"> </span><span class="kn">import</span> <span class="n">QNode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qns.entity.qchannel.qchannel</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumChannel</span>
 
 <span class="n">n2</span> <span class="o">=</span> <span class="n">QNode</span><span class="p">(</span><span class="s2">&quot;n2&quot;</span><span class="p">)</span>
 <span class="n">n1</span> <span class="o">=</span> <span class="n">QNode</span><span class="p">(</span><span class="s2">&quot;n1&quot;</span><span class="p">)</span>
@@ -133,7 +138,7 @@ It has the following attributions:</p>
 </pre></div>
 </div>
 <section id="send-and-receive-qubits">
-<h2>Send and receive qubits<a class="headerlink" href="#send-and-receive-qubits" title="Permalink to this headline"></a></h2>
+<h2>Send and receive qubits<a class="headerlink" href="#send-and-receive-qubits" title="Link to this heading"></a></h2>
 <p>It is easy to send a qubit using <code class="docutils literal notranslate"><span class="pre">send</span></code> method:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n1</span> <span class="o">=</span> <span class="n">QNode</span><span class="p">(</span><span class="s2">&quot;n1&quot;</span><span class="p">)</span>
 <span class="n">n2</span> <span class="o">=</span> <span class="n">QNode</span><span class="p">(</span><span class="s2">&quot;n2&quot;</span><span class="p">)</span>
@@ -159,15 +164,15 @@ It has the following attributions:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">dest</span></code>: the destination</p></li>
 </ul>
 <p>This packet needs to be processed in the <code class="docutils literal notranslate"><span class="pre">handle</span></code> method of the applications:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SendApp</span><span class="p">(</span><span class="n">Application</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="n">QNode</span><span class="p">,</span> <span class="n">qchannel</span><span class="p">:</span> <span class="n">QuantumChannel</span><span class="p">,</span> <span class="n">send_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SendApp</span><span class="p">(</span><span class="n">Application</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="n">QNode</span><span class="p">,</span> <span class="n">qchannel</span><span class="p">:</span> <span class="n">QuantumChannel</span><span class="p">,</span> <span class="n">send_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dest</span> <span class="o">=</span> <span class="n">dest</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qchannel</span> <span class="o">=</span> <span class="n">qchannel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send_rate</span> <span class="o">=</span> <span class="n">send_rate</span>
 
     <span class="c1"># initiate: generate the first send event</span>
-    <span class="k">def</span> <span class="nf">install</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">QNode</span><span class="p">,</span> <span class="n">simulator</span><span class="p">:</span> <span class="n">Simulator</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">install</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">QNode</span><span class="p">,</span> <span class="n">simulator</span><span class="p">:</span> <span class="n">Simulator</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">simulator</span><span class="p">)</span>
 
         <span class="c1"># get start time</span>
@@ -177,7 +182,7 @@ It has the following attributions:</p>
         <span class="n">event</span> <span class="o">=</span> <span class="n">func_to_event</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_qubit</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_simulator</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">send_qubit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">send_qubit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># generate a qubit</span>
         <span class="n">qubit</span> <span class="o">=</span> <span class="n">Qubit</span><span class="p">()</span>
 
@@ -192,8 +197,8 @@ It has the following attributions:</p>
         <span class="n">event</span> <span class="o">=</span> <span class="n">func_to_event</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_qubit</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_simulator</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
-<span class="k">class</span> <span class="nc">RecvApp</span><span class="p">(</span><span class="n">Application</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">QNode</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RecvApp</span><span class="p">(</span><span class="n">Application</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="n">QNode</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">RecvQubitPacket</span><span class="p">):</span>
             <span class="n">qubit</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">qubit</span>
             <span class="n">qchannel</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">qchannel</span>
@@ -226,12 +231,12 @@ It has the following attributions:</p>
 </div>
 </section>
 <section id="error-models-in-transmission">
-<h2>Error models in transmission<a class="headerlink" href="#error-models-in-transmission" title="Permalink to this headline"></a></h2>
+<h2>Error models in transmission<a class="headerlink" href="#error-models-in-transmission" title="Link to this heading"></a></h2>
 <p>Errors can be introduced during sending qubits. The error is handled in function <code class="docutils literal notranslate"><span class="pre">transfer_error_model</span></code>, which takes the channel <code class="docutils literal notranslate"><span class="pre">length</span></code> and other parameters as input. Those parameters shows the quantum channel’s attributions (such as the optical fiber’s decay), and they can be set using <code class="docutils literal notranslate"><span class="pre">transfer_error_model_args</span></code>. This parameter should be in the directory form.</p>
 <p>Here is an example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extend the qubit model to handle transfer error</span>
-<span class="k">class</span> <span class="nc">QubitWithError</span><span class="p">(</span><span class="n">Qubit</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">transfer_error_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">QubitWithError</span><span class="p">(</span><span class="n">Qubit</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">transfer_error_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="c1"># get the decay attribution</span>
         <span class="n">decay</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;decay&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -261,7 +266,7 @@ It has the following attributions:</p>
 </div>
 </section>
 <section id="qubit-loss-quantum-channel">
-<h2>Qubit Loss Quantum Channel<a class="headerlink" href="#qubit-loss-quantum-channel" title="Permalink to this headline"></a></h2>
+<h2>Qubit Loss Quantum Channel<a class="headerlink" href="#qubit-loss-quantum-channel" title="Link to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">qns.entity.qchannel.QubitLossChannel</span></code> is a usually used quantum channel model, that it will drop qubits randomly, following this possibility: <span class="math notranslate nohighlight">\(1-(1-p_{\text{init}})*10^{- \miu \cdot length / 10}\)</span>, where <span class="math notranslate nohighlight">\(p_{\text{init}}\)</span> is the initial drop probability of generating a qubit, <span class="math notranslate nohighlight">\(\miu\)</span> is the attenuation rate, and :math”<cite>length</cite> is the channel length.</p>
 </section>
 </section>
