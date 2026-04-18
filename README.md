@@ -1,5 +1,7 @@
 # SimQN
 
+[![Star History Chart](https://api.star-history.com/svg?repos=ertuil/SimQN&type=Date)](https://star-history.com/#ertuil/SimQN&Date)
+
 - [SimQN](#simqn)
   - [Overview](#overview)
   - [Roadmap](#roadmap)
@@ -18,14 +20,14 @@
 [![Pytest](https://github.com/QNLab-USTC/SimQN/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/QNLab-USTC/SimQN/actions/workflows/pytest.yml)
 ![Flake8](https://github.com/QNLab-USTC/SimQN/actions/workflows/flake8.yml/badge.svg)
 
-**[Attention]** Most of existing&future studies in [QNLab](https://qnlab-ustc.com/) are evaluated on SimQN platform, if you would like to follow our work or seek for an easy-to-use quantum network simulator, you cannot miss SimQN! Please check out the following publication for details. **([Link](https://ieeexplore.ieee.org/abstract/document/10024900/) and [PDF](https://infonetlijian.github.io/homepage/PDF_files/2023-%E3%80%90IEEE%20Network%E3%80%91-SimQN_a_Network-layer_Simulator_for_the_Quantum_Network_Investigation.pdf)).**  
+**[Attention]** Most of existing&future studies in [QNLab](https://qnlab-ustc.com/) are evaluated on SimQN platform. If you would like to follow our work or seek an easy-to-use quantum network simulator, you cannot miss SimQN! Please check out the following publication for details. **([Link](https://ieeexplore.ieee.org/abstract/document/10024900/) and [PDF](https://infonetlijian.github.io/homepage/PDF_files/2023-%E3%80%90IEEE%20Network%E3%80%91-SimQN_a_Network-layer_Simulator_for_the_Quantum_Network_Investigation.pdf)).**  
 
 Welcome to SimQN's documentation. SimQN is a discrete-event-based network simulation platform for quantum networks.
-SimQN enables large-scale investigations, including QKD protocols, entanglement distributions protocols, and routing algorithms, resource allocation schemas in quantum networks. For example, users can use SimQN to design routing algorithms for better QKD performance. For more information, please refer to the [Documents](https://qnlab-ustc.github.io/SimQN/).
+SimQN enables large-scale investigations, including QKD protocols, entanglement distribution protocols, routing algorithms, and resource allocation schemas in quantum networks. For example, users can use SimQN to design routing algorithms for better QKD performance. For more information, please refer to the [Documents](https://qnlab-ustc.github.io/SimQN/).
 
-SimQN is a Python3 library for quantum networking simulation. It is designed to be general purpose. It means that SimQN can be used for both QKD network, entanglement distribution networks, and other kinds of quantum networks' evaluation. The core idea is that SimQN makes no architecture assumption. Since there is currently no recognized network architecture in quantum network investigations, SimQN stays flexible in this aspect.
+SimQN is a Python3 library for quantum networking simulation. It is designed to be general purpose. It means that SimQN can be used for both QKD networks, entanglement distribution networks, and other kinds of quantum networks' evaluation. The core idea is that SimQN makes no architecture assumption. Since there is currently no recognized network architecture in quantum network investigations, SimQN stays flexible in this aspect.
 
-SimQN provides high performance for large-scale network simulation. SimQN uses [Cython](https://cython.org/) to compile critical codes in C/C++ libraries to boost the evaluation. Also, along with the commonly used quantum state-based physical models, SimQN provides a higher-layer fidelity-based entanglement physical model to reduce the computation overhead and brings convenience for users in evaluation. Last but not least, SimQN provides several network auxiliary models for easily building network topologies, producing routing tables and managing multiple session requests.
+SimQN provides high performance for large-scale network simulation. SimQN uses [Cython](https://cython.org/) to compile critical code in C/C++ libraries to boost the evaluation. Also, along with the commonly used quantum state-based physical models, SimQN provides a higher-layer fidelity-based entanglement physical model to reduce the computation overhead and bring convenience for users in evaluation. Last but not least, SimQN provides several network auxiliary models for easily building network topologies, producing routing tables, and managing multiple session requests.
 
 ## Roadmap
 
@@ -131,7 +133,7 @@ Here is an example of using SimQN.
 
 - v0.2.2(Released 2026.01)
   - *New functions!!!*
-  - Simulator Core: Hash Bucket Based Event Scheduler.
+  - Simulator Core: Hash Bucket-Based Event Scheduler.
   - Network Utilities: Add Real Topology Generator, including AboveNetTopology, AGISTopology and Creat Topology From GML File Download From [The Internet Topology Zoo](https://topology-zoo.org/dataset.html). Update the Dijkstra-based Routing Utility.
 
 - v0.2.1(Released 2025.04)
@@ -147,7 +149,7 @@ Here is an example of using SimQN.
 
 - v0.1.4(Released 2022.03)
   - *New functions!!!*
-  - Simulator Core: Priority Queue Based Event Scheduler.
+  - Simulator Core: Priority Queue-Based Event Scheduler.
   - Physical Backends: Qubit Model, EPR Model, Quantum Gates.
   - Quantum Entitise: Quantum Node, Quantum Channel.
   - Network Utilities: Topology Generator, Routing Utility.
@@ -156,7 +158,7 @@ Here is an example of using SimQN.
 
 ## Platform Extension
   - Abane et al. developed [MQNS](https://ieeexplore.ieee.org/abstract/document/11334170) based on SimQN v0.1.5, leveraging the simulator core, entities, and tools to enable simulation under dynamic, heterogeneous configurations.
-  - Majid K et al. integrated SimQN with the open-source OpenAirInterface (OAI) stack to deploy a 5G standalone network capable of supporting quantum operations , proposing the [quantum-inspired RAN (Q-RAN)](https://ieeexplore.ieee.org/abstract/document/11432359), a next-generation framework.
+  - Majid K et al. integrated SimQN with the open-source OpenAirInterface (OAI) stack to deploy a 5G standalone network capable of supporting quantum operations, proposing the [quantum-inspired RAN (Q-RAN)](https://ieeexplore.ieee.org/abstract/document/11432359), a next-generation framework.
   - Josipa et al. enabled SimQN to accept structured data from upstream via the HTTP protocol by utilizing FastAPI, thereby developing a [Docker environment for QKD network simulations](https://repozitorij.fpz.unizg.hr/object/fpz:3666).
 
 ## How to contribute?
@@ -164,16 +166,16 @@ Welcome to contribute through Github Issue or Pull Requests. Please refer to the
 
 ## License and Authors
 
-SimQN is an open-source project under [GPLv3](/LICENSE) license. The authors of the paper includes:
+SimQN is an open-source project under [GPLv3](/LICENSE) license. The authors of the paper include:
 * Lutong Chen (ertuil), School of Cyber Science and Technology, University of Science and Technology of China, China. elliot.98@outlook.com
-* Jian Li(infonetlijian), School of Cyber Science and Technology, University of Science and Technology of China, China. 
-* Kaiping Xue (kaipingxue), School of Cyber Science and Technology, University of Science and Technology of China, China. xue.kaiping@gmail.com
+* Jian Li(infonetlijian), School of Cyber Science and Technology, University of Science and Technology of China, China. lijian9@ustc.edu.cn
+* Kaiping Xue (kaipingxue), School of Cyber Science and Technology, University of Science and Technology of China, China. xue.kaiping@gmail.com & kpxue@ustc.edu.cn
 * Nenghai Yu, School of Cyber Science and Technology, University of Science and Technology of China, China.
 * Ruidong Li, Institute of Science and Engineering, Kanazawa University, Japan.
 * Qibin Sun, School of Cyber Science and Technology, University of Science and Technology of China, China.
 * Jun Lu, School of Cyber Science and Technology, University of Science and Technology of China, China.
 
-Other contributors includes:
+Other contributors include:
 * Zirui Xiao, School of Cyber Science and Technology, University of Science and Technology of China, China.
 * Yuqi Yang, School of Cyber Science and Technology, University of Science and Technology of China, China.
 * Bing Yang, School of Cyber Science and Technology, University of Science and Technology of China, China.
