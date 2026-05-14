@@ -1,21 +1,22 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The discrete-event simulator &mdash; SimQN 0.1.3 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=360bc84d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> SimQN
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SimQN
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -74,9 +79,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="tutorials.html">Tutorials</a> &raquo;</li>
-      <li>The discrete-event simulator</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">The discrete-event simulator</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/tutorials.simulator.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -87,13 +92,13 @@
            <div itemprop="articleBody">
              
   <section id="the-discrete-event-simulator">
-<h1>The discrete-event simulator<a class="headerlink" href="#the-discrete-event-simulator" title="Permalink to this headline"></a></h1>
+<h1>The discrete-event simulator<a class="headerlink" href="#the-discrete-event-simulator" title="Link to this heading"></a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">qns.simulator</span></code> modules provides a discrete-event driven simulator. The simulator organize many events and invokes these events at a pacific time to drive the simulation. Events are bound to a discrete occur time. We start from introducing the time structure.</p>
 <section id="time-structure">
-<h2>Time structure<a class="headerlink" href="#time-structure" title="Permalink to this headline"></a></h2>
+<h2>Time structure<a class="headerlink" href="#time-structure" title="Link to this heading"></a></h2>
 <p>The time is discrete in SimQN, that is, the smallest time slot is <span class="math notranslate nohighlight">\(1/accuracy\)</span>, where <code class="docutils literal notranslate"><span class="pre">accuracy</span></code> is the number of time slots per second. In SimQN, the <code class="docutils literal notranslate"><span class="pre">accuracy</span></code> can be set to meet the simulation’s need. Usually, a larger <code class="docutils literal notranslate"><span class="pre">accuracy</span></code> brings more simulation overhead.</p>
 <p>The discrete time in SimQN is a <code class="docutils literal notranslate"><span class="pre">Time</span></code> object, and it can be described in seconds and number of time slots:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qns.simulator.ts</span> <span class="kn">import</span> <span class="n">Time</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qns.simulator.ts</span><span class="w"> </span><span class="kn">import</span> <span class="n">Time</span>
 
 <span class="n">default_time_accuracy</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="mi">000</span><span class="p">,</span><span class="mi">000</span>
 
@@ -113,13 +118,13 @@
 </div>
 </section>
 <section id="events-in-simulation">
-<h2>Events in simulation<a class="headerlink" href="#events-in-simulation" title="Permalink to this headline"></a></h2>
+<h2>Events in simulation<a class="headerlink" href="#events-in-simulation" title="Link to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">Event</span></code> has a occur time <code class="docutils literal notranslate"><span class="pre">t</span></code> and an <code class="docutils literal notranslate"><span class="pre">invoke</span></code> function. The <code class="docutils literal notranslate"><span class="pre">invoke</span></code> function will be called at time <code class="docutils literal notranslate"><span class="pre">t</span></code>. Just like <code class="docutils literal notranslate"><span class="pre">Time</span></code>, <code class="docutils literal notranslate"><span class="pre">Event``s</span> <span class="pre">are</span> <span class="pre">also</span> <span class="pre">comparable</span> <span class="pre">based</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">occur</span> <span class="pre">time.</span> <span class="pre">``Event</span></code> object has also an optional attribution <code class="docutils literal notranslate"><span class="pre">by</span></code> to represent the entity that generates this event.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qns.simulator.event</span> <span class="kn">import</span> <span class="n">Event</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qns.simulator.event</span><span class="w"> </span><span class="kn">import</span> <span class="n">Event</span>
 
 <span class="c1"># PrintEvent will print &quot;event happened&quot; if invoked</span>
-<span class="k">class</span> <span class="nc">PrintEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">invoke</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PrintEvent</span><span class="p">(</span><span class="n">Event</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">invoke</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;event happened&quot;</span><span class="p">)</span>
 
 <span class="c1"># te will happen at 1 second</span>
@@ -141,10 +146,10 @@
 </pre></div>
 </div>
 <p>To make it easier of building an event, function <code class="docutils literal notranslate"><span class="pre">func_to_event</span></code> can wrap any functions to an event.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qns.simulator.event</span> <span class="kn">import</span> <span class="n">Event</span><span class="p">,</span> <span class="n">func_to_event</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qns.simulator.event</span><span class="w"> </span><span class="kn">import</span> <span class="n">Event</span><span class="p">,</span> <span class="n">func_to_event</span>
 
 <span class="c1"># this is a function to print message</span>
-<span class="k">def</span> <span class="nf">print_msg</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">print_msg</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
 <span class="c1"># func_to_event wrap the print_msg to an event. It is invoked at 6 seconds, and the msg is &quot;hello, world&quot;</span>
@@ -153,7 +158,7 @@
 </div>
 </section>
 <section id="the-simulator">
-<h2>The Simulator<a class="headerlink" href="#the-simulator" title="Permalink to this headline"></a></h2>
+<h2>The Simulator<a class="headerlink" href="#the-simulator" title="Link to this heading"></a></h2>
 <p>The simulator maintains an event pool that can get the most recent event in order, then the simulator invokes this event. After every events is handled, the simulation finishes. By default, the event pool is implemented from a minimum heap so that getting the most recent event and inserting events can be done quickly.</p>
 <p>The simulator is initiated by a start time <code class="docutils literal notranslate"><span class="pre">ts</span></code>, an end time <code class="docutils literal notranslate"><span class="pre">te</span></code>, and the optional time accuracy. The simulation will run between <code class="docutils literal notranslate"><span class="pre">ts</span></code> and <code class="docutils literal notranslate"><span class="pre">te</span></code>. During the simulation, the current time is in variable <code class="docutils literal notranslate"><span class="pre">tc</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># start time is 0 second, end time is 60 seconds.</span>

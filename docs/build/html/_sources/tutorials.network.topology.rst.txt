@@ -25,8 +25,8 @@ Topology generators may have more parameters. The following example shows how to
         lines_number=10,
         qchannel_args={"delay": 0.05},
         cchannel_args={"delay": 0.05},
-        memory_args=[{"capacity": memory_capacity}],
-        nodes_apps=[EntanglementDistributionApp(init_fidelity=init_fidelity)])
+        memory_args=[{"capacity": 50}],
+        nodes_apps=[EntanglementDistributionApp(init_fidelity=0.99)])
 
     # build the network
     net = QuantumNetwork(topo=topo)
@@ -34,11 +34,14 @@ Topology generators may have more parameters. The following example shows how to
 SimQn provides several topology generators:
 
 - ``BasicTopology`` generates several quantum nodes but no quantum channels. All nodes are not connected with each other.
-- ``LineTopology`` connects all nodes to from a line topology. 
+- ``LineTopology`` connects all nodes to from a line topology.
 - ``GridTopology`` forms a square grid topology. ``nodes_number`` should be a perfect square number.
 - ``TreeTopology`` generates a tree topology. It has an additional parameter ``children_number``. Each parent node will connect to  ``children_number`` child nodes.
 - ``RandomTopology`` generates a connected random topology based on the spanning tree. It has an additional parameter ``lines_number`` indicating the number of quantum channels.
 - ``WaxmanTopology`` is another random topology generator based on the Waxman's algorithm. It has three additional parameters, ``size``, ``alpha``, and ``bete``. The topology is in a :math:`size*size` area. Both ``alpha`` and ``bete`` are parameters of the Waxman's algorithm.
+- ``ErdosRenyiTopology`` is is randomly generated following the Erdos-Rényi model (G(n, p) model). In this model, each pair of nodes has a fixed probability `generate_prob` of being connected by a quantum channel. This model is widely used for studying random networks.
+- ``BarabasiAlbertTopology`` is a random topology generator based on the Barabasi-Albert model. Each new QNode added has `new_nodes_egdes` to existing QNodes. The probability of a new QNode connecting to an existing QNode is proportional to the degree of the existing QNode.
+- ``DualBarabasiAlbertTopology`` is a random topology generator based on the Dual Barabási-Albert model. This model extends the Barabási-Albert model by introducing two different edge attachment rules. Each new node connects to existing nodes with either `edges_num1` or `edges_num2` edges, based on a probability `prob`. The attachment probability is proportional to the degree of the existing nodes.
 
 Users can build their own topology by inheriting the ``Topology`` class and implement the ``build`` method.
 
@@ -54,16 +57,17 @@ SimQN is able to generate classic topologies as well. The classic topology is in
 
 .. code-block:: python
 
-    from qns.network.topology import RandomTopology, ClassicTopology
+    from qns.network.topology import RandomTopology
     from qns.network.network import QuantumNetwork
+    from qns.network.topology.topo import ClassicTopology
 
     topo = RandomTopology(
         nodes_number=5,
         lines_number=10,
         qchannel_args={"delay": 0.05},
         cchannel_args={"delay": 0.05},
-        memory_args=[{"capacity": memory_capacity}],
-        nodes_apps=[EntanglementDistributionApp(init_fidelity=init_fidelity)])
+        memory_args=[{"capacity": 50}],
+        nodes_apps=[EntanglementDistributionApp(init_fidelity=0.99)])
 
     # build the network, classic topology follows the quantum topology
     net = QuantumNetwork(topo=topo, classic_topo=ClassicTopology.Follow)

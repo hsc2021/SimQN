@@ -1,0 +1,933 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>qns.network.graphalg.draw &mdash; SimQN 0.1.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=360bc84d"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            SimQN
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Users' Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Install Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../develop.html">Develop Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">qns</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SimQN</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">qns.network.graphalg.draw</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for qns.network.graphalg.draw</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">webbrowser</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+
+<div class="viewcode-block" id="draw">
+<a class="viewcode-back" href="../../../../qns.network.graphalg.html#qns.network.graphalg.draw.draw">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="n">nl</span><span class="p">,</span> <span class="n">ll</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    draw network topology based on provided Node list and Link list</span>
+<span class="sd">    Args:</span>
+<span class="sd">        nl: list of Qnodes</span>
+<span class="sd">        ll: list of QuantumChannel</span>
+<span class="sd">        filename: path of the output file</span>
+<span class="sd">    Return:</span>
+<span class="sd">        HTML file generated and opened</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">node_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">node_ref_to_id</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">node_name_to_id</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">node_obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nl</span><span class="p">):</span>
+        <span class="n">new_id</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Node_</span><span class="si">{</span><span class="n">new_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">raw_apps</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node_obj</span><span class="p">,</span> <span class="s1">&#39;apps&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">processed_apps_labels</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">raw_apps</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_apps</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">raw_apps</span> <span class="o">=</span> <span class="p">[</span><span class="n">raw_apps</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">app_obj</span> <span class="ow">in</span> <span class="n">raw_apps</span><span class="p">:</span>
+                <span class="n">app_index</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">app_label</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">app_obj</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Node_app</span><span class="si">{</span><span class="n">app_index</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">processed_apps_labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">app_label</span><span class="p">))</span>
+                <span class="n">app_index</span> <span class="o">=</span> <span class="n">app_index</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">node_ref_to_id</span><span class="p">[</span><span class="n">node_obj</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_id</span>
+        <span class="n">node_name_to_id</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_id</span>
+        <span class="n">node_name_to_id</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)]</span> <span class="o">=</span> <span class="n">new_id</span>
+
+        <span class="n">node_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">new_id</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+            <span class="s2">&quot;apps&quot;</span><span class="p">:</span> <span class="n">processed_apps_labels</span><span class="p">,</span>
+            <span class="s2">&quot;original_obj&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">node_obj</span><span class="p">)</span>
+        <span class="p">})</span>
+
+    <span class="n">edge_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">link_obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ll</span><span class="p">):</span>
+        <span class="n">src_raw</span><span class="p">,</span> <span class="n">dest_raw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">link_obj</span><span class="p">,</span> <span class="s2">&quot;node_list&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">src_raw</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dest_raw</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Skipping link </span><span class="si">{</span><span class="n">link_obj</span><span class="si">}</span><span class="s2">, cannot find src/dest attributes.&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+        <span class="n">src_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">dest_id</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">src_raw</span> <span class="ow">in</span> <span class="n">node_ref_to_id</span><span class="p">:</span>
+            <span class="n">src_id</span> <span class="o">=</span> <span class="n">node_ref_to_id</span><span class="p">[</span><span class="n">src_raw</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">dest_raw</span> <span class="ow">in</span> <span class="n">node_ref_to_id</span><span class="p">:</span>
+            <span class="n">dest_id</span> <span class="o">=</span> <span class="n">node_ref_to_id</span><span class="p">[</span><span class="n">dest_raw</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">src_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">src_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">src_raw</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">src_raw</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
+                <span class="n">src_str</span> <span class="o">=</span> <span class="n">src_raw</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="n">src_str</span> <span class="ow">in</span> <span class="n">node_name_to_id</span><span class="p">:</span>
+                <span class="n">src_id</span> <span class="o">=</span> <span class="n">node_name_to_id</span><span class="p">[</span><span class="n">src_str</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">dest_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dest_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">dest_raw</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dest_raw</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">):</span>
+                <span class="n">dest_str</span> <span class="o">=</span> <span class="n">dest_raw</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="n">dest_str</span> <span class="ow">in</span> <span class="n">node_name_to_id</span><span class="p">:</span>
+                <span class="n">dest_id</span> <span class="o">=</span> <span class="n">node_name_to_id</span><span class="p">[</span><span class="n">dest_str</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">src_id</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">dest_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Skipping link, could not map nodes: </span><span class="si">{</span><span class="n">src_raw</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">dest_raw</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">link_name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">link_obj</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Link_</span><span class="si">{</span><span class="n">src_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">dest_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">bw</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">link_obj</span><span class="p">,</span> <span class="s1">&#39;bandwidth&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">fid</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">link_obj</span><span class="p">,</span> <span class="s1">&#39;fidelity&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+        <span class="n">edge_list</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;e</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">src_id</span><span class="p">,</span>
+            <span class="s2">&quot;dest&quot;</span><span class="p">:</span> <span class="n">dest_id</span><span class="p">,</span>
+            <span class="s2">&quot;bandwidth&quot;</span><span class="p">:</span> <span class="n">bw</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">link_name</span><span class="p">,</span>
+            <span class="s2">&quot;fidelity&quot;</span><span class="p">:</span> <span class="n">fid</span>
+        <span class="p">})</span>
+
+    <span class="c1"># --- REPLACED NETWORKX WITH SIMPLE CIRCULAR LAYOUT ---</span>
+    <span class="n">vis_nodes</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">node_list</span><span class="p">)</span>
+    <span class="n">vis_edges</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">edge_list</span><span class="p">)</span>
+
+    <span class="n">node_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">vis_nodes</span><span class="p">)</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># Visual scale for initial circle</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vis_nodes</span><span class="p">):</span>
+        <span class="c1"># Calculate angle for circular distribution</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">node_count</span><span class="p">)</span>
+
+        <span class="c1"># Assign initial coordinates</span>
+        <span class="n">n</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">n</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+
+        <span class="n">n</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">n</span><span class="p">[</span><span class="s1">&#39;_realLabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+
+        <span class="n">apps_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="s1">&#39;apps&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;apps&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;None&quot;</span>
+        <span class="n">n</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ID:</span><span class="si">{</span><span class="n">n</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">  Name:</span><span class="si">{</span><span class="n">n</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">Apps: </span><span class="si">{</span><span class="n">apps_str</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">vis_edges</span><span class="p">:</span>
+        <span class="n">e</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">]</span>
+        <span class="n">e</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;dest&#39;</span><span class="p">]</span>
+        <span class="n">e</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+        <span class="n">e</span><span class="p">[</span><span class="s1">&#39;_realLabel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="n">e</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Name:</span><span class="si">{</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Bandwidth:</span><span class="si">{</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Fidelity:</span><span class="si">{</span><span class="n">e</span><span class="p">[</span><span class="s1">&#39;fidelity&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Python List Comprehension: Split into multiple lines</span>
+    <span class="n">table_nodes_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="s2">&quot;apps&quot;</span><span class="p">:</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="s1">&#39;apps&#39;</span><span class="p">])}</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">node_list</span>
+    <span class="p">]</span>
+
+    <span class="n">table_edges_data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+            <span class="s2">&quot;src&quot;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;src&#39;</span><span class="p">],</span>
+            <span class="s2">&quot;dest&quot;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;dest&#39;</span><span class="p">],</span>
+            <span class="s2">&quot;bandwidth&quot;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">],</span>
+            <span class="s2">&quot;fidelity&quot;</span><span class="p">:</span> <span class="n">e</span><span class="p">[</span><span class="s1">&#39;fidelity&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edge_list</span>
+    <span class="p">]</span>
+
+    <span class="n">df_nodes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">table_nodes_data</span><span class="p">)</span>
+    <span class="n">df_edges</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">table_edges_data</span><span class="p">)</span>
+
+    <span class="c1"># Pandas to_html: Split arguments</span>
+    <span class="n">node_table_html</span> <span class="o">=</span> <span class="n">df_nodes</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span>
+        <span class="n">classes</span><span class="o">=</span><span class="s1">&#39;custom-table node-table-row&#39;</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">table_id</span><span class="o">=</span><span class="s2">&quot;nodeTable&quot;</span><span class="p">,</span>
+        <span class="n">border</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span>
+    <span class="n">edge_table_html</span> <span class="o">=</span> <span class="n">df_edges</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span>
+        <span class="n">classes</span><span class="o">=</span><span class="s1">&#39;custom-table edge-table-row&#39;</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">table_id</span><span class="o">=</span><span class="s2">&quot;edgeTable&quot;</span><span class="p">,</span>
+        <span class="n">border</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span>
+
+    <span class="n">physics_options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;physics&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;solver&quot;</span><span class="p">:</span> <span class="s2">&quot;barnesHut&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;barnesHut&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;gravitationalConstant&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">8000</span><span class="p">,</span>
+                <span class="s2">&quot;centralGravity&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+                <span class="s2">&quot;springLength&quot;</span><span class="p">:</span> <span class="mi">95</span><span class="p">,</span>
+                <span class="s2">&quot;springConstant&quot;</span><span class="p">:</span> <span class="mf">0.04</span><span class="p">,</span>
+                <span class="s2">&quot;damping&quot;</span><span class="p">:</span> <span class="mf">0.09</span><span class="p">,</span>
+                <span class="s2">&quot;avoidOverlap&quot;</span><span class="p">:</span> <span class="mf">0.1</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;stabilization&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;enabled&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;iterations&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">js_nodes_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">vis_nodes</span><span class="p">)</span>
+    <span class="n">js_edges_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">vis_edges</span><span class="p">)</span>
+    <span class="n">js_physics_options</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">physics_options</span><span class="p">[</span><span class="s2">&quot;physics&quot;</span><span class="p">])</span>
+
+    <span class="c1"># CSS Styles</span>
+    <span class="n">css_styles</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    &lt;style&gt;</span>
+<span class="s2">        * { box-sizing: border-box; }</span>
+<span class="s2">        body, html {</span>
+<span class="s2">            margin: 0; padding: 0; height: 100vh; width: 100vw;</span>
+<span class="s2">            overflow: hidden;</span>
+<span class="s2">            font-family: &#39;Segoe UI&#39;, Tahoma, Geneva, Verdana, sans-serif;</span>
+<span class="s2">        }</span>
+<span class="s2">        #app-container { display: flex; width: 100%; height: 100%; }</span>
+
+<span class="s2">        #left-panel {</span>
+<span class="s2">            width: 300px; min-width: 250px; background: #2c3e50; color: #ecf0f1;</span>
+<span class="s2">            display: flex; flex-direction: column; border-right: 1px solid #1a252f;</span>
+<span class="s2">            z-index: 20;</span>
+<span class="s2">        }</span>
+<span class="s2">        .panel-content { padding: 15px; overflow-y: auto; flex: 1; }</span>
+
+<span class="s2">        #center-panel {</span>
+<span class="s2">            flex: 1; min-width: 300px; position: relative; background: #fdfdfd;</span>
+<span class="s2">        }</span>
+<span class="s2">        #mynetwork { width: 100%; height: 100%; outline: none; }</span>
+
+<span class="s2">        #right-panel {</span>
+<span class="s2">            width: 450px; min-width: 200px; background: #f4f6f7;</span>
+<span class="s2">            border-left: 1px solid #bdc3c7; display: flex; flex-direction: column;</span>
+<span class="s2">        }</span>
+
+<span class="s2">        .resizer {</span>
+<span class="s2">            width: 5px; background: #95a5a6; cursor: col-resize; z-index: 10;</span>
+<span class="s2">            transition: 0.2s;</span>
+<span class="s2">        }</span>
+<span class="s2">        .resizer:hover { background: #3498db; }</span>
+
+<span class="s2">        /* Controls */</span>
+<span class="s2">        h3 {</span>
+<span class="s2">            border-bottom: 2px solid #34495e; padding-bottom: 8px; margin-top: 0;</span>
+<span class="s2">            font-size: 16px; color: #f1c40f;</span>
+<span class="s2">        }</span>
+<span class="s2">        h4 {</span>
+<span class="s2">            color: #1abc9c; margin: 15px 0 5px 0; border-bottom: 1px dashed #7f8c8d;</span>
+<span class="s2">            padding-bottom: 3px; font-size: 14px;</span>
+<span class="s2">        }</span>
+<span class="s2">        label {</span>
+<span class="s2">            font-size: 12px; color: #bdc3c7; display: block; margin-top: 8px;</span>
+<span class="s2">        }</span>
+<span class="s2">        input, select, button {</span>
+<span class="s2">            width: 100%; padding: 8px; margin-top: 4px; border-radius: 4px;</span>
+<span class="s2">            border: 1px solid #34495e; font-size: 13px; box-sizing: border-box</span>
+<span class="s2">        }</span>
+<span class="s2">        button {</span>
+<span class="s2">            background: #27ae60; color: white; border: none; cursor: pointer;</span>
+<span class="s2">            margin-top: 12px; font-weight: bold; transition: 0.2s;</span>
+<span class="s2">        }</span>
+<span class="s2">        button:hover { background: #2ecc71; }</span>
+<span class="s2">        .btn-blue { background: #2980b9; }</span>
+<span class="s2">        .btn-blue:hover { background: #3498db; }</span>
+<span class="s2">        .btn-orange { background: #e67e22; }</span>
+<span class="s2">        .btn-orange:hover { background: #d35400; }</span>
+
+<span class="s2">        .checkbox-container {</span>
+<span class="s2">            display: flex; align-items: center; margin-top: 10px; font-size: 13px;</span>
+<span class="s2">            background: rgba(0,0,0,0.2); padding: 5px; border-radius: 4px;</span>
+<span class="s2">        }</span>
+<span class="s2">        .checkbox-container input { width: auto; margin-right: 8px; cursor: pointer;}</span>
+
+<span class="s2">        /* Path Results */</span>
+<span class="s2">        #path-results-container {</span>
+<span class="s2">            margin-top: 15px; border-top: 1px solid #34495e; padding-top: 10px;</span>
+<span class="s2">        }</span>
+<span class="s2">        .path-item {</span>
+<span class="s2">            background: #34495e; padding: 10px; margin-top: 8px; border-radius: 4px;</span>
+<span class="s2">            cursor: pointer; font-size: 12px; border-left: 4px solid transparent;</span>
+<span class="s2">            transition: 0.2s;</span>
+<span class="s2">        }</span>
+<span class="s2">        .path-item:hover { background: #3d566e; }</span>
+<span class="s2">        .path-active {</span>
+<span class="s2">            border-left: 4px solid #e74c3c; background: #2c3e50;</span>
+<span class="s2">            box-shadow: 0 0 5px rgba(0,0,0,0.5);</span>
+<span class="s2">        }</span>
+<span class="s2">        .path-detail {</span>
+<span class="s2">            color: #bdc3c7; margin-top: 4px; font-family: monospace; font-size: 11px;</span>
+<span class="s2">            word-break: break-all;</span>
+<span class="s2">        }</span>
+
+<span class="s2">        /* Tables */</span>
+<span class="s2">        .table-wrapper {</span>
+<span class="s2">            flex: 1; overflow: auto; padding: 0; display: flex; flex-direction: column;</span>
+<span class="s2">        }</span>
+<span class="s2">        .table-header-title {</span>
+<span class="s2">            padding: 10px; background: #e9ecef; font-weight: bold;</span>
+<span class="s2">            border-bottom: 1px solid #ddd; flex-shrink: 0;</span>
+<span class="s2">        }</span>
+
+<span class="s2">        table.custom-table {</span>
+<span class="s2">            width: 100%; border-collapse: collapse; background: white;</span>
+<span class="s2">            font-size: 12px; table-layout: fixed;</span>
+<span class="s2">        }</span>
+<span class="s2">        table.custom-table th {</span>
+<span class="s2">            background: #009879; color: white; padding: 8px; text-align: left;</span>
+<span class="s2">            position: sticky; top: 0; z-index: 2;</span>
+<span class="s2">        }</span>
+<span class="s2">        table.custom-table td {</span>
+<span class="s2">            padding: 8px; border-bottom: 1px solid #eee; color: #333;</span>
+<span class="s2">            word-wrap: break-word; cursor: pointer;</span>
+<span class="s2">        }</span>
+<span class="s2">        table.custom-table tr:hover { background: #fffde7; }</span>
+<span class="s2">        table.custom-table tr.selected {</span>
+<span class="s2">            background: #fff3cd !important; border-left: 4px solid #FFD700 !important;</span>
+<span class="s2">        }</span>
+
+<span class="s2">        /* Modals */</span>
+<span class="s2">        .modal {</span>
+<span class="s2">            display: none; position: fixed; z-index: 100; left: 0; top: 0;</span>
+<span class="s2">            width: 100%; height: 100%; background: rgba(0,0,0,0.5);</span>
+<span class="s2">        }</span>
+<span class="s2">        .modal-content {</span>
+<span class="s2">            background: white; margin: 10</span><span class="si">% a</span><span class="s2">uto; padding: 25px; width: 320px;</span>
+<span class="s2">            border-radius: 8px; position: relative;</span>
+<span class="s2">            box-shadow: 0 5px 15px rgba(0,0,0,0.3);</span>
+<span class="s2">        }</span>
+<span class="s2">        .close-btn {</span>
+<span class="s2">            position: absolute; right: 15px; top: 10px; font-size: 24px;</span>
+<span class="s2">            cursor: pointer; color: #aaa;</span>
+<span class="s2">        }</span>
+<span class="s2">        .close-btn:hover { color: #333; }</span>
+<span class="s2">    &lt;/style&gt;</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="n">html_structure</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    &lt;div id=&quot;app-container&quot;&gt;</span>
+<span class="s2">        &lt;div id=&quot;left-panel&quot;&gt;</span>
+<span class="s2">            &lt;div class=&quot;panel-content&quot;&gt;</span>
+<span class="s2">                &lt;h3&gt; Control Panel&lt;/h3&gt;</span>
+<span class="s2">                &lt;div style=&quot;font-size:11px; color:#aaa; margin-bottom:10px;&quot;&gt;</span>
+<span class="s2">                    Nodes: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">nl</span><span class="p">)</span><span class="si">}</span><span class="s2"> | Edges: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ll</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">                &lt;/div&gt;</span>
+
+<span class="s2">                &lt;h4&gt; Display&lt;/h4&gt;</span>
+<span class="s2">                &lt;div class=&quot;checkbox-container&quot;</span>
+<span class="s2">                     onclick=&quot;document.getElementById(&#39;label-toggle&#39;).click()&quot;&gt;</span>
+<span class="s2">                    &lt;input type=&quot;checkbox&quot; id=&quot;label-toggle&quot; onchange=&quot;toggleLabels(this)&quot;&gt;</span>
+<span class="s2">                    &lt;span&gt;Show Labels&lt;/span&gt;</span>
+<span class="s2">                &lt;/div&gt;</span>
+<span class="s2">                &lt;div class=&quot;checkbox-container&quot;</span>
+<span class="s2">                     onclick=&quot;document.getElementById(&#39;physics-toggle&#39;).click()&quot;&gt;</span>
+<span class="s2">                    &lt;input type=&quot;checkbox&quot; id=&quot;physics-toggle&quot;</span>
+<span class="s2">                           onchange=&quot;togglePhysics(this)&quot; checked&gt;</span>
+<span class="s2">                    &lt;span&gt;Live Physics&lt;/span&gt;</span>
+<span class="s2">                &lt;/div&gt;</span>
+
+<span class="s2">                &lt;h4&gt; Visual Style&lt;/h4&gt;</span>
+<span class="s2">                &lt;input id=&quot;style-name&quot; placeholder=&quot;Target Name (e.g. Node_01)&quot;&gt;</span>
+<span class="s2">                &lt;input type=&quot;color&quot; id=&quot;style-color&quot; value=&quot;#ff0000&quot;</span>
+<span class="s2">                       style=&quot;height:35px; padding:2px; margin-top:5px;&quot;&gt;</span>
+<span class="s2">                &lt;button onclick=&quot;applyColorByName()&quot;&gt;Apply Color&lt;/button&gt;</span>
+
+<span class="s2">                &lt;h4&gt; Pathfinding (Edge Disjoint)&lt;/h4&gt;</span>
+<span class="s2">                &lt;div style=&quot;font-size:11px; color:#aaa; margin-bottom:5px;&quot;&gt;</span>
+<span class="s2">                    Algorithm: Find Path -&gt; Remove Edges -&gt; Repeat</span>
+<span class="s2">                &lt;/div&gt;</span>
+<span class="s2">                &lt;div style=&quot;display:flex; gap:5px;&quot;&gt;</span>
+<span class="s2">                    &lt;input id=&quot;path-start&quot; placeholder=&quot;Start Node Name/ID&quot;&gt;</span>
+<span class="s2">                    &lt;input id=&quot;path-end&quot; placeholder=&quot;End Node Name/ID&quot;&gt;</span>
+<span class="s2">                &lt;/div&gt;</span>
+
+<span class="s2">                &lt;label&gt;Metric:&lt;/label&gt;</span>
+<span class="s2">                &lt;select id=&quot;path-weight-metric&quot;&gt;</span>
+<span class="s2">                    &lt;option value=&quot;bandwidth&quot;&gt;Bandwidth (Minimize Cost)&lt;/option&gt;</span>
+<span class="s2">                    &lt;option value=&quot;hops&quot;&gt;Hop Count&lt;/option&gt;</span>
+<span class="s2">                    &lt;option value=&quot;fidelity&quot;&gt;Max Log-Fidelity&lt;/option&gt;</span>
+<span class="s2">                &lt;/select&gt;</span>
+<span class="s2">                &lt;label&gt;Max K Paths (Disjoint):&lt;/label&gt;</span>
+<span class="s2">                &lt;input type=&quot;number&quot; id=&quot;path-k&quot; value=&quot;3&quot; min=&quot;1&quot; max=&quot;100&quot;&gt;</span>
+
+<span class="s2">                &lt;button class=&quot;btn-orange&quot; onclick=&quot;calculateKShortestPaths()&quot;&gt;</span>
+<span class="s2">                    Calculate Path</span>
+<span class="s2">                &lt;/button&gt;</span>
+<span class="s2">                &lt;button class=&quot;btn-blue&quot; onclick=&quot;resetGraph()&quot;&gt; Reset View&lt;/button&gt;</span>
+
+<span class="s2">                &lt;div id=&quot;path-results-container&quot;&gt;</span>
+<span class="s2">                    &lt;div style=&quot;font-size:12px; color:#aaa; text-align:center; padding:10px;&quot;&gt;</span>
+<span class="s2">                        Results will appear here</span>
+<span class="s2">                    &lt;/div&gt;</span>
+<span class="s2">                &lt;/div&gt;</span>
+
+<span class="s2">                &lt;br&gt;</span>
+<span class="s2">                &lt;div style=&quot;display:flex; gap:5px;&quot;&gt;</span>
+<span class="s2">                    &lt;button onclick=&quot;openModal(&#39;nodeModal&#39;)&quot;&gt; Node&lt;/button&gt;</span>
+<span class="s2">                    &lt;button onclick=&quot;openModal(&#39;edgeModal&#39;)&quot;&gt; Edge&lt;/button&gt;</span>
+<span class="s2">                &lt;/div&gt;</span>
+<span class="s2">            &lt;/div&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+
+<span class="s2">        &lt;div class=&quot;resizer&quot; id=&quot;resizer-left&quot;&gt;&lt;/div&gt;</span>
+<span class="s2">        &lt;div id=&quot;center-panel&quot;&gt;&lt;div id=&quot;mynetwork&quot;&gt;&lt;/div&gt;&lt;/div&gt;</span>
+<span class="s2">        &lt;div class=&quot;resizer&quot; id=&quot;resizer-right&quot;&gt;&lt;/div&gt;</span>
+
+<span class="s2">        &lt;div id=&quot;right-panel&quot;&gt;</span>
+<span class="s2">            &lt;div class=&quot;table-wrapper&quot; style=&quot;border-bottom: 4px solid #ddd;&quot;&gt;</span>
+<span class="s2">                &lt;div class=&quot;table-header-title&quot;&gt; Node List (Click to Toggle)&lt;/div&gt;</span>
+<span class="s2">                </span><span class="si">{</span><span class="n">node_table_html</span><span class="si">}</span>
+<span class="s2">            &lt;/div&gt;</span>
+<span class="s2">            &lt;div class=&quot;table-wrapper&quot;&gt;</span>
+<span class="s2">                &lt;div class=&quot;table-header-title&quot;&gt; Edge List (Click to Toggle)&lt;/div&gt;</span>
+<span class="s2">                </span><span class="si">{</span><span class="n">edge_table_html</span><span class="si">}</span>
+<span class="s2">            &lt;/div&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">    &lt;/div&gt;</span>
+
+<span class="s2">    &lt;div id=&quot;nodeModal&quot; class=&quot;modal&quot;&gt;</span>
+<span class="s2">        &lt;div class=&quot;modal-content&quot;&gt;</span>
+<span class="s2">            &lt;span class=&quot;close-btn&quot; onclick=&quot;closeModal(&#39;nodeModal&#39;)&quot;&gt;&amp;times;&lt;/span&gt;</span>
+<span class="s2">            &lt;h3&gt;Add Node (Visual Only)&lt;/h3&gt;</span>
+<span class="s2">            &lt;input id=&quot;new-node-id&quot; placeholder=&quot;ID (Integer)&quot;&gt;</span>
+<span class="s2">            &lt;input id=&quot;new-node-name&quot; placeholder=&quot;Name&quot;&gt;</span>
+<span class="s2">            &lt;input id=&quot;new-node-apps&quot; placeholder=&quot;Apps&quot;&gt;</span>
+<span class="s2">            &lt;button onclick=&quot;addNode()&quot;&gt;Confirm Add&lt;/button&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">    &lt;/div&gt;</span>
+
+<span class="s2">    &lt;div id=&quot;edgeModal&quot; class=&quot;modal&quot;&gt;</span>
+<span class="s2">        &lt;div class=&quot;modal-content&quot;&gt;</span>
+<span class="s2">            &lt;span class=&quot;close-btn&quot; onclick=&quot;closeModal(&#39;edgeModal&#39;)&quot;&gt;&amp;times;&lt;/span&gt;</span>
+<span class="s2">            &lt;h3&gt;Add Connection (Visual Only)&lt;/h3&gt;</span>
+<span class="s2">            &lt;input id=&quot;new-edge-src&quot; placeholder=&quot;Src ID&quot;&gt;</span>
+<span class="s2">            &lt;input id=&quot;new-edge-dest&quot; placeholder=&quot;Dest ID&quot;&gt;</span>
+<span class="s2">            &lt;input id=&quot;new-edge-bandwidth&quot; type=&quot;number&quot; placeholder=&quot;Bandwidth&quot; value=&quot;10&quot;&gt;</span>
+<span class="s2">            &lt;input id=&quot;new-edge-fidelity&quot; type=&quot;number&quot; step=&quot;0.01&quot; min=&quot;0&quot; max=&quot;1&quot;</span>
+<span class="s2">                   placeholder=&quot;Fidelity&quot; value=&quot;0.99&quot;&gt;</span>
+<span class="s2">            &lt;button onclick=&quot;addEdge()&quot;&gt;Confirm Connect&lt;/button&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">    &lt;/div&gt;</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># JS Logic</span>
+    <span class="n">js_logic</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    &lt;script type=&quot;text/javascript&quot;</span>
+<span class="s2">            src=&quot;https://unpkg.com/vis-network/standalone/umd/vis-network.min.js&quot;&gt;</span>
+<span class="s2">    &lt;/script&gt;</span>
+<span class="s2">    &lt;script type=&quot;text/javascript&quot;&gt;</span>
+<span class="s2">        var nodes = new vis.DataSet(</span><span class="si">{</span><span class="n">js_nodes_data</span><span class="si">}</span><span class="s2">);</span>
+<span class="s2">        var edges = new vis.DataSet(</span><span class="si">{</span><span class="n">js_edges_data</span><span class="si">}</span><span class="s2">);</span>
+<span class="s2">        var container = document.getElementById(&#39;mynetwork&#39;);</span>
+
+<span class="s2">        var HIGHLIGHT_COLOR = &#39;#FFD700&#39;;</span>
+<span class="s2">        var HIGHLIGHT_BORDER = &#39;#E67E22&#39;;</span>
+<span class="s2">        var PATH_COLOR = &#39;#e74c3c&#39;;</span>
+
+<span class="s2">        var options = </span><span class="se">{{</span>
+<span class="s2">            nodes: </span><span class="se">{{</span>
+<span class="s2">                shape: &#39;dot&#39;,</span>
+<span class="s2">                size: 20,</span>
+<span class="s2">                font: </span><span class="se">{{</span><span class="s2"> size: 14 </span><span class="se">}}</span><span class="s2">,</span>
+<span class="s2">                color: </span><span class="se">{{</span>
+<span class="s2">                    background: &#39;#97C2FC&#39;,</span>
+<span class="s2">                    border: &#39;#2B7CE9&#39;,</span>
+<span class="s2">                    highlight: </span><span class="se">{{</span>
+<span class="s2">                        background: HIGHLIGHT_COLOR,</span>
+<span class="s2">                        border: HIGHLIGHT_BORDER</span>
+<span class="s2">                    </span><span class="se">}}</span>
+<span class="s2">                </span><span class="se">}}</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">,</span>
+<span class="s2">            edges: </span><span class="se">{{</span>
+<span class="s2">                font: </span><span class="se">{{</span><span class="s2"> size: 12, align: &#39;middle&#39; </span><span class="se">}}</span><span class="s2">,</span>
+<span class="s2">                color: </span><span class="se">{{</span>
+<span class="s2">                    color: &#39;#2B7CE9&#39;,</span>
+<span class="s2">                    hover: &#39;#848484&#39;,</span>
+<span class="s2">                    highlight: HIGHLIGHT_COLOR</span>
+<span class="s2">                </span><span class="se">}}</span><span class="s2">,</span>
+<span class="s2">                smooth: </span><span class="se">{{</span><span class="s2"> enabled: true, type: &#39;dynamic&#39; </span><span class="se">}}</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">,</span>
+<span class="s2">            physics: </span><span class="si">{</span><span class="n">js_physics_options</span><span class="si">}</span><span class="s2">,</span>
+<span class="s2">            interaction: </span><span class="se">{{</span>
+<span class="s2">                hover: true,</span>
+<span class="s2">                tooltipDelay: 200,</span>
+<span class="s2">                zoomView: true,</span>
+<span class="s2">                dragView: true,</span>
+<span class="s2">                dragNodes: true</span>
+<span class="s2">            </span><span class="se">}}</span>
+<span class="s2">        </span><span class="se">}}</span><span class="s2">;</span>
+
+<span class="s2">        var network = new vis.Network(container,</span>
+<span class="s2">                                      </span><span class="se">{{</span><span class="s2"> nodes: nodes, edges: edges </span><span class="se">}}</span><span class="s2">,</span>
+<span class="s2">                                      options);</span>
+
+<span class="s2">        // --- Helper: Find Node ID by Name or ID ---</span>
+<span class="s2">        function resolveNodeId(input) </span><span class="se">{{</span>
+<span class="s2">            if(!input) return null;</span>
+<span class="s2">            input = input.toString().trim();</span>
+<span class="s2">            // Try explicit Integer ID match first</span>
+<span class="s2">            if(!isNaN(input)) </span><span class="se">{{</span>
+<span class="s2">                let id = parseInt(input);</span>
+<span class="s2">                if(nodes.get(id)) return id;</span>
+<span class="s2">            </span><span class="se">}}</span>
+<span class="s2">            // Try Name match</span>
+<span class="s2">            let node = nodes.get().find(n =&gt; n.name === input);</span>
+<span class="s2">            if(node) return node.id;</span>
+<span class="s2">            return null;</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        // --- Build Graph Helper ---</span>
+<span class="s2">        function buildGraphFromData(nodeData, edgeData, metric) </span><span class="se">{{</span>
+<span class="s2">            var graph = </span><span class="se">{{}}</span><span class="s2">;</span>
+<span class="s2">            nodeData.getIds().forEach(id =&gt; graph[id] = </span><span class="se">{{}}</span><span class="s2">);</span>
+<span class="s2">            edgeData.get().forEach(e =&gt; </span><span class="se">{{</span>
+<span class="s2">                let w = 1;</span>
+<span class="s2">                if(metric === &#39;bandwidth&#39;) w = (e.bandwidth ? 1000/e.bandwidth : 1);</span>
+<span class="s2">                else if (metric === &#39;fidelity&#39;) </span><span class="se">{{</span>
+<span class="s2">                    let f = e.fidelity || 1.0;</span>
+<span class="s2">                    if(f &lt;= 0) f = 0.0001; if(f &gt; 1) f = 1.0;</span>
+<span class="s2">                    w = -Math.log(f);</span>
+<span class="s2">                </span><span class="se">}}</span>
+
+<span class="s2">                // Undirected Graph Logic</span>
+<span class="s2">                if(!graph[e.from]) graph[e.from]=</span><span class="se">{{}}</span><span class="s2">;</span>
+<span class="s2">                if(!graph[e.to]) graph[e.to]=</span><span class="se">{{}}</span><span class="s2">;</span>
+
+<span class="s2">                graph[e.from][e.to] = </span><span class="se">{{</span><span class="s2">weight: w, id: e.id</span><span class="se">}}</span><span class="s2">;</span>
+<span class="s2">                graph[e.to][e.from] = </span><span class="se">{{</span><span class="s2">weight: w, id: e.id</span><span class="se">}}</span><span class="s2">;</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">);</span>
+<span class="s2">            return graph;</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        // --- Pathfinding: Edge Disjoint Algorithm (Greedy) ---</span>
+<span class="s2">        function calculateKShortestPaths() </span><span class="se">{{</span>
+<span class="s2">            var startInput = document.getElementById(&#39;path-start&#39;).value;</span>
+<span class="s2">            var endInput = document.getElementById(&#39;path-end&#39;).value;</span>
+<span class="s2">            var K = parseInt(document.getElementById(&#39;path-k&#39;).value) || 1;</span>
+<span class="s2">            var metric = document.getElementById(&#39;path-weight-metric&#39;).value;</span>
+
+<span class="s2">            var start = resolveNodeId(startInput);</span>
+<span class="s2">            var end = resolveNodeId(endInput);</span>
+
+<span class="s2">            if(!start || !end) </span><span class="se">{{</span><span class="s2"> alert(&quot;Start or End node not found!&quot;); return; </span><span class="se">}}</span>
+<span class="s2">            if(start === end) </span><span class="se">{{</span><span class="s2"> alert(&quot;Start and End are the same!&quot;); return; </span><span class="se">}}</span>
+
+<span class="s2">            // 1. Build initial local graph</span>
+<span class="s2">            var localGraph = buildGraphFromData(nodes, edges, metric);</span>
+<span class="s2">            var foundPaths = [];</span>
+
+<span class="s2">            for(let k=0; k &lt; K; k++) </span><span class="se">{{</span>
+<span class="s2">                // 2. Run Dijkstra on current graph</span>
+<span class="s2">                var result = dijkstra(localGraph, start, end);</span>
+
+<span class="s2">                if(!result) break; // No more paths possible (graph disconnected)</span>
+
+<span class="s2">                foundPaths.push(result);</span>
+
+<span class="s2">                // 3. REMOVE EDGES used in this path from localGraph</span>
+<span class="s2">                let pathNodes = result.nodes;</span>
+<span class="s2">                for(let i=0; i &lt; pathNodes.length - 1; i++) </span><span class="se">{{</span>
+<span class="s2">                    let u = pathNodes[i];</span>
+<span class="s2">                    let v = pathNodes[i+1];</span>
+
+<span class="s2">                    // Delete forward edge</span>
+<span class="s2">                    if(localGraph[u]) delete localGraph[u][v];</span>
+<span class="s2">                    // Delete reverse edge (undirected)</span>
+<span class="s2">                    if(localGraph[v]) delete localGraph[v][u];</span>
+<span class="s2">                </span><span class="se">}}</span>
+<span class="s2">            </span><span class="se">}}</span>
+
+<span class="s2">            displayPathResults(foundPaths, metric);</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        function dijkstra(g, s, e) </span><span class="se">{{</span>
+<span class="s2">            var dist = </span><span class="se">{{}}</span><span class="s2">, prev = </span><span class="se">{{}}</span><span class="s2">, pq = new Set(Object.keys(g).map(Number));</span>
+<span class="s2">            for(let k in g) dist[k] = Infinity;</span>
+<span class="s2">            dist[s] = 0;</span>
+
+<span class="s2">            while(pq.size) </span><span class="se">{{</span>
+<span class="s2">                let u = null;</span>
+<span class="s2">                for(let n of pq) if(u===null || dist[n] &lt; dist[u]) u = n;</span>
+
+<span class="s2">                if(u === e || dist[u] === Infinity) break;</span>
+<span class="s2">                pq.delete(u);</span>
+
+<span class="s2">                if(g[u]) </span><span class="se">{{</span>
+<span class="s2">                    for(let v in g[u]) </span><span class="se">{{</span>
+<span class="s2">                        let v_int = parseInt(v);</span>
+<span class="s2">                        if(pq.has(v_int)) </span><span class="se">{{</span>
+<span class="s2">                            let alt = dist[u] + g[u][v].weight;</span>
+<span class="s2">                            if(alt &lt; dist[v_int]) </span><span class="se">{{</span>
+<span class="s2">                                dist[v_int] = alt;</span>
+<span class="s2">                                prev[v_int] = u;</span>
+<span class="s2">                            </span><span class="se">}}</span>
+<span class="s2">                        </span><span class="se">}}</span>
+<span class="s2">                    </span><span class="se">}}</span>
+<span class="s2">                </span><span class="se">}}</span>
+<span class="s2">            </span><span class="se">}}</span>
+<span class="s2">            if(dist[e] === Infinity) return null;</span>
+<span class="s2">            var path = [], u = e; while(u) </span><span class="se">{{</span><span class="s2"> path.unshift(u); u = prev[u]; </span><span class="se">}}</span>
+<span class="s2">            return </span><span class="se">{{</span><span class="s2">nodes: path, cost: dist[e]</span><span class="se">}}</span><span class="s2">;</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        // --- Display Results &amp; Highlight ---</span>
+<span class="s2">        function displayPathResults(paths, metric) </span><span class="se">{{</span>
+<span class="s2">            var container = document.getElementById(&#39;path-results-container&#39;);</span>
+<span class="s2">            container.innerHTML = &quot;&quot;;</span>
+
+<span class="s2">            if(paths.length === 0) </span><span class="se">{{</span>
+<span class="s2">                container.innerHTML =</span>
+<span class="s2">                  &quot;&lt;div style=&#39;color:#e74c3c; padding:10px; text-align:center&#39;&gt;&quot; +</span>
+<span class="s2">                  &quot;❌ No Path Found&lt;/div&gt;&quot;;</span>
+<span class="s2">                return;</span>
+<span class="s2">            </span><span class="se">}}</span>
+
+<span class="s2">            paths.forEach((p, i) =&gt; </span><span class="se">{{</span>
+<span class="s2">                var div = document.createElement(&#39;div&#39;);</span>
+<span class="s2">                div.className = &#39;path-item&#39;;</span>
+
+<span class="s2">                let costText = &quot;&quot;;</span>
+<span class="s2">                if (metric === &#39;fidelity&#39;) </span><span class="se">{{</span>
+<span class="s2">                    costText = &quot;Fidelity: &quot; + (Math.exp(-p.cost)*100).toFixed(4) + &quot;%&quot;;</span>
+<span class="s2">                </span><span class="se">}}</span><span class="s2"> else </span><span class="se">{{</span>
+<span class="s2">                    costText = &quot;Cost: &quot; + p.cost.toFixed(2);</span>
+<span class="s2">                </span><span class="se">}}</span>
+
+<span class="s2">                let namePath = p.nodes.map(nid =&gt; nodes.get(nid).name).join(&quot; ➝ &quot;);</span>
+
+<span class="s2">                // Multiline Template Literal for readability in Python</span>
+<span class="s2">                div.innerHTML = `</span>
+<span class="s2">                    &lt;strong&gt;Path $</span><span class="se">{{</span><span class="s2">i+1</span><span class="se">}}</span><span class="s2">&lt;/strong&gt;</span>
+<span class="s2">                    &lt;span style=&quot;float:right&quot;&gt;$</span><span class="se">{{</span><span class="s2">costText</span><span class="se">}}</span><span class="s2">&lt;/span&gt;</span>
+<span class="s2">                    &lt;div class=&quot;path-detail&quot;&gt;$</span><span class="se">{{</span><span class="s2">namePath</span><span class="se">}}</span><span class="s2">&lt;/div&gt;</span>
+<span class="s2">                `;</span>
+
+<span class="s2">                div.onclick = function() </span><span class="se">{{</span>
+<span class="s2">                    document.querySelectorAll(&#39;.path-item&#39;).forEach(el =&gt;</span>
+<span class="s2">                        el.classList.remove(&#39;path-active&#39;));</span>
+<span class="s2">                    div.classList.add(&#39;path-active&#39;);</span>
+<span class="s2">                    highlightPath(p.nodes);</span>
+<span class="s2">                </span><span class="se">}}</span><span class="s2">;</span>
+
+<span class="s2">                container.appendChild(div);</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">);</span>
+
+<span class="s2">            // Auto-select first path</span>
+<span class="s2">            if(paths.length &gt; 0) container.children[0].click();</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        function highlightPath(nodesIds) </span><span class="se">{{</span>
+<span class="s2">            resetGraphColorOnly();</span>
+<span class="s2">            // Highlight Edges</span>
+<span class="s2">            for(let i=0; i&lt;nodesIds.length-1; i++) </span><span class="se">{{</span>
+<span class="s2">                let u = nodesIds[i], v = nodesIds[i+1];</span>
+<span class="s2">                let es = edges.get().filter(e =&gt;</span>
+<span class="s2">                    (e.from===u &amp;&amp; e.to===v) || (e.from===v &amp;&amp; e.to===u)</span>
+<span class="s2">                );</span>
+<span class="s2">                es.forEach(e =&gt; edges.update(</span><span class="se">{{</span>
+<span class="s2">                    id:e.id,</span>
+<span class="s2">                    color:</span><span class="se">{{</span><span class="s2">color: PATH_COLOR</span><span class="se">}}</span><span class="s2">,</span>
+<span class="s2">                    width: 3</span>
+<span class="s2">                </span><span class="se">}}</span><span class="s2">));</span>
+<span class="s2">            </span><span class="se">}}</span>
+<span class="s2">            // Highlight Nodes</span>
+<span class="s2">            nodesIds.forEach(id =&gt; nodes.update(</span><span class="se">{{</span>
+<span class="s2">                id:id,</span>
+<span class="s2">                color:</span><span class="se">{{</span><span class="s2">background: &#39;#ff7675&#39;</span><span class="se">}}</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">));</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        function resetGraph() </span><span class="se">{{</span>
+<span class="s2">            resetGraphColorOnly();</span>
+<span class="s2">            network.fit();</span>
+<span class="s2">            var emptyMsg = &quot;&lt;div style=&#39;font-size:12px; color:#aaa; &quot; +</span>
+<span class="s2">                           &quot;text-align:center; padding:10px;&#39;&gt;&quot; +</span>
+<span class="s2">                           &quot;Results will appear here&lt;/div&gt;&quot;;</span>
+<span class="s2">            document.getElementById(&#39;path-results-container&#39;).innerHTML = emptyMsg;</span>
+<span class="s2">            document.querySelectorAll(&#39;tr.selected&#39;).forEach(r =&gt;</span>
+<span class="s2">                r.classList.remove(&#39;selected&#39;));</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        function resetGraphColorOnly() </span><span class="se">{{</span>
+<span class="s2">            edges.update(edges.getIds().map(id =&gt; (</span><span class="se">{{</span>
+<span class="s2">                id:id,</span>
+<span class="s2">                color:</span><span class="se">{{</span><span class="s2">color:&#39;#2B7CE9&#39;, highlight: HIGHLIGHT_COLOR</span><span class="se">}}</span><span class="s2">,</span>
+<span class="s2">                width:1</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">)));</span>
+
+<span class="s2">            nodes.update(nodes.getIds().map(id =&gt; (</span><span class="se">{{</span>
+<span class="s2">                id:id,</span>
+<span class="s2">                color: </span><span class="se">{{</span>
+<span class="s2">                    background:&#39;#97C2FC&#39;,</span>
+<span class="s2">                    border:&#39;#2B7CE9&#39;,</span>
+<span class="s2">                    highlight: </span><span class="se">{{</span>
+<span class="s2">                        background: HIGHLIGHT_COLOR,</span>
+<span class="s2">                        border: HIGHLIGHT_BORDER</span>
+<span class="s2">                    </span><span class="se">}}</span>
+<span class="s2">                </span><span class="se">}}</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">)));</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        // --- Table Interactions (Toggle) ---</span>
+<span class="s2">        function attachTableEvents(tableId, isEdge) </span><span class="se">{{</span>
+<span class="s2">            var table = document.getElementById(tableId);</span>
+<span class="s2">            if(!table) return;</span>
+<span class="s2">            var rows = table.getElementsByTagName(&#39;tr&#39;);</span>
+
+<span class="s2">            for (var i = 1; i &lt; rows.length; i++) </span><span class="se">{{</span>
+<span class="s2">                rows[i].onclick = function() </span><span class="se">{{</span>
+<span class="s2">                    var wasSelected = this.classList.contains(&#39;selected&#39;);</span>
+<span class="s2">                    document.querySelectorAll(&#39;tr.selected&#39;).forEach(r =&gt;</span>
+<span class="s2">                        r.classList.remove(&#39;selected&#39;));</span>
+
+<span class="s2">                    if (wasSelected) </span><span class="se">{{</span>
+<span class="s2">                        network.unselectAll();</span>
+<span class="s2">                        resetGraphColorOnly();</span>
+<span class="s2">                    </span><span class="se">}}</span><span class="s2"> else </span><span class="se">{{</span>
+<span class="s2">                        this.classList.add(&#39;selected&#39;);</span>
+<span class="s2">                        if(isEdge) </span><span class="se">{{</span>
+<span class="s2">                            var name = this.cells[0].innerText;</span>
+<span class="s2">                            var target = edges.get().find(e =&gt; e.name === name);</span>
+<span class="s2">                            if(target) network.selectEdges([target.id]);</span>
+<span class="s2">                        </span><span class="se">}}</span><span class="s2"> else </span><span class="se">{{</span>
+<span class="s2">                            var id = parseInt(this.cells[0].innerText);</span>
+<span class="s2">                            network.selectNodes([id]);</span>
+<span class="s2">                            network.focus(id, </span><span class="se">{{</span><span class="s2"> scale: 1.2, animation: true </span><span class="se">}}</span><span class="s2">);</span>
+<span class="s2">                        </span><span class="se">}}</span>
+<span class="s2">                    </span><span class="se">}}</span>
+<span class="s2">                </span><span class="se">}}</span><span class="s2">;</span>
+<span class="s2">            </span><span class="se">}}</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        attachTableEvents(&#39;nodeTable&#39;, false);</span>
+<span class="s2">        attachTableEvents(&#39;edgeTable&#39;, true);</span>
+
+<span class="s2">        // --- UI Utils ---</span>
+<span class="s2">        function toggleLabels(checkbox) </span><span class="se">{{</span>
+<span class="s2">            var show = checkbox.checked;</span>
+<span class="s2">            nodes.update(nodes.get().map(n =&gt;</span>
+<span class="s2">                (</span><span class="se">{{</span><span class="s2"> id: n.id, label: show ? n._realLabel : &quot; &quot; </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            ));</span>
+<span class="s2">            edges.update(edges.get().map(e =&gt;</span>
+<span class="s2">                (</span><span class="se">{{</span><span class="s2"> id: e.id, label: show ? e._realLabel : &quot; &quot; </span><span class="se">}}</span><span class="s2">)</span>
+<span class="s2">            ));</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        function togglePhysics(checkbox) </span><span class="se">{{</span>
+<span class="s2">            network.setOptions(</span><span class="se">{{</span><span class="s2"> physics: </span><span class="se">{{</span><span class="s2"> enabled: checkbox.checked </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">);</span>
+<span class="s2">            if(!checkbox.checked) network.storePositions();</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        function applyColorByName() </span><span class="se">{{</span>
+<span class="s2">            var nameInput = document.getElementById(&#39;style-name&#39;).value.trim();</span>
+<span class="s2">            var color = document.getElementById(&#39;style-color&#39;).value;</span>
+<span class="s2">            var targetNode = nodes.get().find(n =&gt; n.name === nameInput);</span>
+<span class="s2">            if(targetNode) </span><span class="se">{{</span>
+<span class="s2">                nodes.update(</span><span class="se">{{</span>
+<span class="s2">                    id: targetNode.id,</span>
+<span class="s2">                    color: </span><span class="se">{{</span>
+<span class="s2">                        background: color,</span>
+<span class="s2">                        border: color,</span>
+<span class="s2">                        highlight:</span><span class="se">{{</span>
+<span class="s2">                            background: HIGHLIGHT_COLOR,</span>
+<span class="s2">                            border: HIGHLIGHT_BORDER</span>
+<span class="s2">                        </span><span class="se">}}</span>
+<span class="s2">                    </span><span class="se">}}</span>
+<span class="s2">                </span><span class="se">}}</span><span class="s2">);</span>
+<span class="s2">                return;</span>
+<span class="s2">            </span><span class="se">}}</span>
+<span class="s2">            alert(&quot;Node not found: &quot; + nameInput);</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        function makeResizable(resizer, side) </span><span class="se">{{</span>
+<span class="s2">            const l = document.getElementById(&#39;left-panel&#39;);</span>
+<span class="s2">            const r = document.getElementById(&#39;right-panel&#39;);</span>
+<span class="s2">            const c = document.getElementById(&#39;app-container&#39;);</span>
+
+<span class="s2">            resizer.addEventListener(&#39;mousedown&#39;, function(e) </span><span class="se">{{</span>
+<span class="s2">                e.preventDefault();</span>
+<span class="s2">                document.addEventListener(&#39;mousemove&#39;, resize);</span>
+<span class="s2">                document.addEventListener(&#39;mouseup&#39;, stopResize);</span>
+<span class="s2">                function resize(ev) </span><span class="se">{{</span>
+<span class="s2">                    if(side===&#39;left&#39;) </span><span class="se">{{</span>
+<span class="s2">                        l.style.width = Math.max(150, Math.min(500, ev.clientX))+&#39;px&#39;;</span>
+<span class="s2">                    </span><span class="se">}}</span><span class="s2"> else </span><span class="se">{{</span>
+<span class="s2">                        let w = c.offsetWidth - ev.clientX;</span>
+<span class="s2">                        r.style.width = Math.max(150, Math.min(800, w))+&#39;px&#39;;</span>
+<span class="s2">                    </span><span class="se">}}</span>
+<span class="s2">                </span><span class="se">}}</span>
+<span class="s2">                function stopResize() </span><span class="se">{{</span>
+<span class="s2">                    document.removeEventListener(&#39;mousemove&#39;, resize);</span>
+<span class="s2">                    document.removeEventListener(&#39;mouseup&#39;, stopResize);</span>
+<span class="s2">                </span><span class="se">}}</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">);</span>
+<span class="s2">        </span><span class="se">}}</span>
+<span class="s2">        makeResizable(document.getElementById(&#39;resizer-left&#39;), &#39;left&#39;);</span>
+<span class="s2">        makeResizable(document.getElementById(&#39;resizer-right&#39;), &#39;right&#39;);</span>
+
+<span class="s2">        // Modal Logic</span>
+<span class="s2">        function openModal(id) </span><span class="se">{{</span>
+<span class="s2">            document.getElementById(id).style.display = &#39;block&#39;;</span>
+<span class="s2">        </span><span class="se">}}</span>
+<span class="s2">        function closeModal(id) </span><span class="se">{{</span>
+<span class="s2">            document.getElementById(id).style.display = &#39;none&#39;;</span>
+<span class="s2">        </span><span class="se">}}</span>
+<span class="s2">        window.onclick = function(event) </span><span class="se">{{</span>
+<span class="s2">            if (event.target.classList.contains(&#39;modal&#39;))</span>
+<span class="s2">                event.target.style.display = &quot;none&quot;;</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        function addNode() </span><span class="se">{{</span>
+<span class="s2">            let id = parseInt(document.getElementById(&#39;new-node-id&#39;).value);</span>
+<span class="s2">            let name = document.getElementById(&#39;new-node-name&#39;).value;</span>
+<span class="s2">            let apps = document.getElementById(&#39;new-node-apps&#39;).value;</span>
+<span class="s2">            if(!id || !name) return alert(&#39;ID and Name required&#39;);</span>
+<span class="s2">            nodes.add(</span><span class="se">{{</span>
+<span class="s2">                id:id,</span>
+<span class="s2">                label: &quot; &quot;,</span>
+<span class="s2">                _realLabel: name,</span>
+<span class="s2">                name: name,</span>
+<span class="s2">                title: &quot;ID:&quot;+id+&quot; NAME:&quot;+name,</span>
+<span class="s2">                apps: apps.split(&#39;,&#39;)</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">);</span>
+<span class="s2">            closeModal(&#39;nodeModal&#39;);</span>
+<span class="s2">        </span><span class="se">}}</span>
+
+<span class="s2">        function addEdge() </span><span class="se">{{</span>
+<span class="s2">            let u = parseInt(document.getElementById(&#39;new-edge-src&#39;).value);</span>
+<span class="s2">            let v = parseInt(document.getElementById(&#39;new-edge-dest&#39;).value);</span>
+<span class="s2">            let bw = parseFloat(document.getElementById(&#39;new-edge-bandwidth&#39;).value);</span>
+<span class="s2">            let fid = parseFloat(document.getElementById(&#39;new-edge-fidelity&#39;).value);</span>
+<span class="s2">            if(!u || !v) return alert(&#39;Source and Dest IDs required&#39;);</span>
+<span class="s2">            edges.add(</span><span class="se">{{</span>
+<span class="s2">                from:u, to:v, bandwidth: bw, fidelity: fid,</span>
+<span class="s2">                name: &quot;Link_&quot;+u+&quot;_&quot;+v, title: &quot;Manually Added&quot;</span>
+<span class="s2">            </span><span class="se">}}</span><span class="s2">);</span>
+<span class="s2">            closeModal(&#39;edgeModal&#39;);</span>
+<span class="s2">        </span><span class="se">}}</span>
+<span class="s2">    &lt;/script&gt;</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="n">full_html</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&quot;</span>
+        <span class="s2">&quot;&lt;meta charset=&#39;utf-8&#39;&gt;&lt;title&gt;Quantum Network Visualizer&lt;/title&gt;&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">css_styles</span><span class="si">}</span><span class="s2">&lt;/head&gt;&lt;body&gt;</span><span class="si">{</span><span class="n">html_structure</span><span class="si">}{</span><span class="n">js_logic</span><span class="si">}</span><span class="s2">&lt;/body&gt;&lt;/html&gt;&quot;</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">full_html</span><span class="p">)</span>
+
+    <span class="n">webbrowser</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;file://&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Elliot Chen.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

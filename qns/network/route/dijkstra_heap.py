@@ -21,7 +21,7 @@ import math
 from qns.entity.node.node import QNode
 from qns.entity.qchannel.qchannel import QuantumChannel
 from qns.entity.cchannel.cchannel import ClassicChannel
-from qns.network.route.route import RouteImpl, NetworkRouteError
+from qns.network.route.route import RouteImpl
 import heapq
 
 
@@ -68,7 +68,7 @@ class DijkstraRouteAlgorithmHeap(RouteImpl):
     def build(
         self, nodes: List[QNode], channels: List[Union[QuantumChannel, ClassicChannel]]
     ):
-        neighbors_table = {node: [] for node in nodes} 
+        neighbors_table = {node: [] for node in nodes}
         for channel in channels:
             assert len(channel.node_list) == 2
             metric = self.metric_func(channel)
@@ -98,14 +98,14 @@ class DijkstraRouteAlgorithmHeap(RouteImpl):
                         heapq.heappush(heap, heapitem(neigh, nodes_cost[neigh]))
                         prev_node[neigh] = node
 
-            srcpath={}
+            srcpath = {}
             for dst in nodes:
                 if nodes_cost[dst] == self.INF:
                     continue
 
                 if dst in srcpath:
                     continue
-                
+
                 path = []
                 curr = dst
                 while curr is not None:
@@ -113,12 +113,12 @@ class DijkstraRouteAlgorithmHeap(RouteImpl):
                     curr = prev_node[curr]
                 path.reverse()
 
-                while len(path) !=0:
+                while len(path) != 0:
                     if path[-1] in srcpath:
                         break
                     srcpath[path[-1]] = [nodes_cost[path[-1]], path[:]]
                     path.pop()
-            self.route_table[srcn]=srcpath
+            self.route_table[srcn] = srcpath
 
     def query(self, src: QNode, dest: QNode) -> List[Tuple[float, QNode, List[QNode]]]:
         """
@@ -135,7 +135,7 @@ class DijkstraRouteAlgorithmHeap(RouteImpl):
         src_routelist: Dict[QNode, List[float, List[QNode]]] = self.route_table.get(src, None)
         if src_routelist is None:
             return []
-        
+
         dst_path = src_routelist.get(dest, None)
         if dst_path is None:
             return []

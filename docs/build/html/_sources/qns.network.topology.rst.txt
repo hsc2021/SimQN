@@ -60,6 +60,30 @@ qns.network.topology.waxmantopo module
    :undoc-members:
    :show-inheritance:
 
+qns.network.topology.erdosrenyitopo module
+------------------------------------------
+
+.. automodule:: qns.network.topology.erdosrenyitopo
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+qns.network.topology.barabasialberttopo module
+----------------------------------------------
+
+.. automodule:: qns.network.topology.barabasialberttopo
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+qns.network.topology.dualbarabasialberttopo module
+--------------------------------------------------
+
+.. automodule:: qns.network.topology.dualbarabasialberttopo
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
