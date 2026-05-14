@@ -50,15 +50,13 @@ class AppR(Application):
         self.recved_time.append(self._simulator.tc)
 
 
-def test(is_used, tparam):
+def _run_sim(is_used, tparam):
     sim = Simulator(0, 10, pool_cls=StableEventPool)
-
     install(sim)
 
     n1 = QNode("n1")
     n2 = QNode("n2")
 
-    global c12
     if not is_used:
         c12 = ClassicChannel(
             bandwidth=tparam[0],
@@ -96,27 +94,30 @@ def test(is_used, tparam):
 
     s1.start()
     s2.start()
-
     sim.run()
 
-    print(f"n1->n2: {r1.recved}")
-    print(f"time:{r1.recved_time}")
-    print(f"\nn2->n1: {r2.recved}")
-    print(f"time:{r2.recved_time}")
+    print(f"\nn1->n2: {r1.recved}, time: {r1.recved_time}")
+    print(f"n2->n1: {r2.recved}, time: {r2.recved_time}")
 
 
-bidir = (2, 0, 0, 1)
-print("============================")
-print("bidir w/o Ex:")
-test(False, bidir)
-print("---------------")
-print("bidir w/ Ex:")
-test(True, bidir)
+def test_bidir_without_ex():
+    print("\n--- bidir w/o Ex ---")
+    _run_sim(False, (2, 0, 0, 1))
 
-reliable = (0, 0.5, 1, 0)
-print("============================")
-print("reliable w/o Ex:")
-test(False, reliable)
-print("---------------")
-print("reliable w/ Ex:")
-test(True, reliable)
+def test_bidir_with_ex():
+    print("\n--- bidir w/ Ex ---")
+    _run_sim(True, (2, 0, 0, 1))
+
+def test_reliable_without_ex():
+    print("\n--- reliable w/o Ex ---")
+    _run_sim(False, (0, 0.5, 1, 0))
+
+def test_reliable_with_ex():
+    print("\n--- reliable w/ Ex ---")
+    _run_sim(True, (0, 0.5, 1, 0))
+
+
+test_bidir_without_ex()
+test_bidir_with_ex()
+test_reliable_without_ex()
+test_reliable_with_ex()
