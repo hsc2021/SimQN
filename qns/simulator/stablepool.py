@@ -30,7 +30,7 @@ class StableEventPool(object):
             return self.event == other.event and self.seq == other.seq
 
         def __lt__(self, other) -> bool:
-            return self.event < other.event or (
+            return self.event < other.event or (@
                 self.event == other.event and self.seq < other.seq
             )
 
@@ -60,8 +60,7 @@ class StableEventPool(object):
         self.te = te
         self.tc = ts
         self.event_list = []
-        self.insert_num = {}
-        self.pop_num = {}
+        self.seq = 0
 
     @property
     def current_time(self) -> Time:
@@ -82,11 +81,8 @@ class StableEventPool(object):
         if event.t < self.tc or event.t > self.te:
             return False
 
-        if event.t not in self.insert_num:
-            self.insert_num[event.t] = 0
-            self.pop_num[event.t] = 0
-        sevent = self.StableEvent(event, self.insert_num[event.t])
-        self.insert_num[event.t] += 1
+        sevent = self.StableEvent(event, self.seq)
+        self.seq += 1
         heapq.heappush(self.event_list, sevent)
         return True
 
@@ -101,10 +97,6 @@ class StableEventPool(object):
             sevent = heapq.heappop(self.event_list)
             event = sevent.event
             self.tc = event.t
-            self.pop_num[event.t] += 1
-            if self.pop_num[event.t] == self.insert_num[event.t]:
-                self.insert_num.pop(event.t, None)
-                self.pop_num.pop(event.t, None)
         except IndexError:
             event = None
             self.tc = self.te
