@@ -2,6 +2,7 @@ from qns.network.route.dijkstra import DijkstraRouteAlgorithm
 from qns.network.route.dijkstra_heap import DijkstraRouteAlgorithmHeap
 from qns.network.topology.waxmantopo import WaxmanTopology
 from qns.network.topology.treetopo import TreeTopology
+import random
 import time
 
 
@@ -22,7 +23,7 @@ def test_speed():
     dijk_heap.build(nodes, edges)
     t2 = time.perf_counter()
 
-    print(f"\n=== Build Time ===")
+    print("\n=== Build Time ===")
     print(f"DijkstraRouteAlgorithm build time: {(t1-t0)*1000:.3f} ms")
     print(f"DijkstraRouteAlgorithmHeap build time: {(t2-t1)*1000:.3f} ms")
     print(f"Heap speedup: {(t1-t0)/(t2-t1):.2f}x")
@@ -39,13 +40,10 @@ def test_func():
 
     nodes, edges = topo[0], topo[1]
 
-    t0 = time.perf_counter()
     dijk_default.build(nodes, edges)
-    t1 = time.perf_counter()
     dijk_heap.build(nodes, edges)
-    t2 = time.perf_counter()
 
-    print(f"\n=== Route Result Comparison ===")
+    print("\n=== Route Result Comparison ===")
     mismatches = 0
     total_queries = 10000
     random.seed(42)
@@ -84,6 +82,7 @@ def test_func():
     print(f"Total queries: {total_queries}")
     print(f"Mismatches: {mismatches}")
     print(f"Result: {'PASS' if mismatches == 0 else 'FAIL'}\n")
+
 
 test_func()
 test_speed()
