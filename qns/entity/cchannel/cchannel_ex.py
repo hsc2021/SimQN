@@ -15,13 +15,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Any, List
+from typing import List, Union
 
 from qns.simulator.ts import Time
 from qns.entity.node.node import QNode
 from qns.models.delay.delay import DelayModel
 from qns.simulator.simulator import Simulator
-from qns.entity.cchannel.cchannel import *
+from qns.utils.rnd import get_rand
+import qns.utils.log as log
+from qns.entity.cchannel.cchannel import ClassicPacket, ClassicChannel, RecvClassicPacket, NextHopNotConnectionException
 
 
 class ClassicChannelEx(ClassicChannel):
@@ -35,8 +37,8 @@ class ClassicChannelEx(ClassicChannel):
         name: str = None,
         node_list: List[QNode] = [],
         bandwidth: int = 0,
-        delay: float | DelayModel = 0,
-        length: float | None = 0,
+        delay: Union[float, DelayModel] = 0,
+        length: Union[float, None] = 0,
         drop_rate: float = 0,
         max_buffer_size: int = 0,
     ):
