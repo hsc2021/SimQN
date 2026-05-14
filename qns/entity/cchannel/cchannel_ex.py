@@ -38,7 +38,7 @@ class ClassicChannelEx(ClassicChannel):
         node_list: List[QNode] = [],
         bandwidth: int = 0,
         delay: Union[float, DelayModel] = 0,
-        length: float | None = 0,
+        length: Union[float, None] = 0,
         drop_rate: float = 0,
         max_buffer_size: int = 0,
     ):
