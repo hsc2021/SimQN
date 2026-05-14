@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import List
+from typing import List, Union
 
 from qns.simulator.ts import Time
 from qns.entity.node.node import QNode
@@ -37,7 +37,7 @@ class ClassicChannelEx(ClassicChannel):
         name: str = None,
         node_list: List[QNode] = [],
         bandwidth: int = 0,
-        delay: float | DelayModel = 0,
+        delay: Union[float, DelayModel] = 0,
         length: float | None = 0,
         drop_rate: float = 0,
         max_buffer_size: int = 0,
