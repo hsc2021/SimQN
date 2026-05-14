@@ -50,7 +50,7 @@ class AppR(Application):
         self.recved_time.append(self._simulator.tc)
 
 
-def test(ex, tparam):
+def test(is_used, tparam):
     sim = Simulator(0, 10, pool_cls=StableEventPool)
 
     install(sim)
@@ -59,7 +59,7 @@ def test(ex, tparam):
     n2 = QNode("n2")
 
     global c12
-    if not ex:
+    if not is_used:
         c12 = ClassicChannel(
             bandwidth=tparam[0],
             drop_rate=tparam[1],
