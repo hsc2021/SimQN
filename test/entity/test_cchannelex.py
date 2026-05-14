@@ -104,13 +104,16 @@ def test_bidir_without_ex():
     print("\n--- bidir w/o Ex ---")
     _run_sim(False, (2, 0, 0, 1))
 
+
 def test_bidir_with_ex():
     print("\n--- bidir w/ Ex ---")
     _run_sim(True, (2, 0, 0, 1))
 
+
 def test_reliable_without_ex():
     print("\n--- reliable w/o Ex ---")
     _run_sim(False, (0, 0.5, 1, 0))
+
 
 def test_reliable_with_ex():
     print("\n--- reliable w/ Ex ---")
