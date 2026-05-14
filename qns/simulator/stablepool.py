@@ -30,7 +30,7 @@ class StableEventPool(object):
             return self.event == other.event and self.seq == other.seq
 
         def __lt__(self, other) -> bool:
-            return self.event < other.event or (@
+            return self.event < other.event or (
                 self.event == other.event and self.seq < other.seq
             )
 

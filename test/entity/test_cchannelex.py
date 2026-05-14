@@ -1,8 +1,10 @@
 from qns.simulator.event import Event
 from qns.simulator import Simulator, func_to_event
-from qns.utils.log import *
 from qns.simulator.stablepool import StableEventPool
-from qns.entity import *
+from qns.entity.node.node import QNode
+from qns.entity.node.app import Application
+from qns.utils.log import install
+from qns.entity.cchannel.cchannel import ClassicChannel, ClassicPacket
 from qns.entity.cchannel.cchannel_ex import ClassicChannelEx
 
 

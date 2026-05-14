@@ -15,13 +15,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Any, List
+from typing import List
 
 from qns.simulator.ts import Time
 from qns.entity.node.node import QNode
 from qns.models.delay.delay import DelayModel
 from qns.simulator.simulator import Simulator
-from qns.entity.cchannel.cchannel import *
+from qns.utils.rnd import get_rand
+import qns.utils.log as log
+from qns.entity.cchannel.cchannel import ClassicPacket, ClassicChannel, RecvClassicPacket, NextHopNotConnectionException
 
 
 class ClassicChannelEx(ClassicChannel):
