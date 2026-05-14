@@ -16,8 +16,6 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import heapq
-from collections import deque
-from typing import Any
 from qns.simulator.ts import Time
 from qns.simulator.event import Event
 
