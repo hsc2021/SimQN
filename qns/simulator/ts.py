@@ -122,6 +122,6 @@ class Time(object):
 
     def __repr__(self) -> str:
         return str(self.sec)
-    
+
     def __hash__(self) -> int:
         return self.time_slot.__hash__()
