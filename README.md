@@ -51,6 +51,7 @@ SimQN is designed as a functional and easy-to-use simulator, like [NS3](https://
 Compared with the existing quantum network simulators, the developers pay more attention to simulation in the network area. Currently, a network simulation can be complicated, as users may have to implement routing algorithms and multiply protocols in different layers to complete a simulation. SimQN aims to break down this problem by providing a modulized quantum node and reusable algorithms and protocols. As a result, users can focus on what they study and reuse other built-in modules. The developers believe this will significantly reduce the burden on our users. As for the physics area, SimQN can also simulate quantum noise, fidelity, and more. Thus, if you focus on the research of the quantum network area, SimQN can be a competitive choice.  
 
 **The main advantages of SimQN can be summarized as follows.**
+
 - Easy-to-use with Python
 - High-efficiency simulator core
 - Customizable qubit model
@@ -132,6 +133,11 @@ Here is an example of using SimQN.
 
 ## Release History
 
+- v0.2.3(Released 2026.05)
+  - *New funcation!!!*
+  - Simulator Core: StableEventPool with Heap-Based Event Scheduling.
+  - Network Utilities: Dijkstra Routing with Binary Heap, ClassicChannel Extension for Reliable Packet Delivery and Ordering.
+
 - v0.2.2(Released 2026.01)
   - *New functions!!!*
   - Simulator Core: Hash Bucket-Based Event Scheduler.
@@ -158,6 +164,7 @@ Here is an example of using SimQN.
   - Tools: Rnd Tools.
 
 ## Platform Extension
+
   - Abane et al. developed [MQNS](https://ieeexplore.ieee.org/abstract/document/11334170) based on SimQN v0.1.5, leveraging the simulator core, entities, and tools to enable simulation under dynamic, heterogeneous configurations.
   - Majid K et al. integrated SimQN with the open-source OpenAirInterface (OAI) stack to deploy a 5G standalone network capable of supporting quantum operations, proposing the [quantum-inspired RAN (Q-RAN)](https://ieeexplore.ieee.org/abstract/document/11432359), a next-generation framework.
   - Josipa et al. enabled SimQN to accept structured data from upstream via the HTTP protocol by utilizing FastAPI, thereby developing a [Docker environment for QKD network simulations](https://repozitorij.fpz.unizg.hr/object/fpz:3666).
@@ -202,3 +209,26 @@ Please cite this publication if you use SimQN in your research.
   doi={10.1109/MNET.130.2200481}
 }
 ```
+
+## Academic Paper Using SimQN for Simulation
+1. Ikken N, Kumar P, Slaoui A, et al. Optimizing multi-hop quantum communication using bidirectional quantum teleportation protocol[J]. arXiv preprint arXiv:2504.07320, 2025.
+2. Kumar P, Kar B. ZBR: Zone-based routing in quantum networks with efficient entanglement distribution[J]. Journal of Network and Computer Applications, 2025, 238: 104156.
+3. Kumar P, Kar B, Shen S H. Trace-distance based end-to-end entanglement fidelity with information preservation in quantum networks[J]. Journal of Network and Computer Applications, 2025: 104366.
+4. Xiao Z, Li J, Xue K, et al. A connectionless entanglement distribution protocol design in quantum networks[J]. IEEE Network, 2023, 38(1): 131-139.
+5. Wu J, Chen L, Zhang J, et al. A distributed routing protocol based on key reservation in quantum key distribution networks[C]//ICC 2024-IEEE International Conference on Communications. IEEE, 2024: 509-514.
+6. Chen Y, Li J, Li Z, et al. An Asynchronous Key Relay Protocol Design for Large-Scale Quantum Key Distribution Networks[J]. IEEE Transactions on Networking, 2025.
+7. Zheng P, Li J, Li Z, et al. An efficient and robust resource allocation method for quantum key distribution networks[J]. IEEE Transactions on Network and Service Management, 2025.
+8. Yang Y, Li Z, Li J, et al. An On-demand Routing Scheme with QoS Provisioning for QKD Networks[C]//2025 International Conference on Quantum Communications, Networking, and Computing (QCNC). IEEE, 2025: 224-231.
+9. Tan J, Li Z, Li J, et al. Distributed Entanglement Routing Scheme With Fidelity Guarantee in Quantum Networks[J]. IEEE Transactions on Network Science and Engineering, 2025, 13: 3320-3334.
+10. Liu C, Che X, Xie J, et al. A multi-path QKD algorithm with multiple segments[J]. Journal of Cyber Security and Mobility, 2024, 13(2): 193-214.
+11. Bayleyegn A A, Tunc H S D, Bassoli R, et al. Impact of Network Latency on Entanglement Distribution in Quantum Repeaters Network[C]//European Wireless 2024; 29th European Wireless Conference. VDE, 2024: 134-139.
+12. Li J, Zheng P, Li Z, et al. Integration of quantum key distribution networks and classical networks: An evolution perspective[J]. IEEE Network, 2025.
+13. Abane A, Shi J, Mai V S, et al. Multiverse: A Simulator for Evaluating Entanglement Routing in Quantum Networks[J]. IEEE Internet Computing, 2026.
+14. Li J, Wang Z, Xue K, et al. DRM-ETP: A Dynamic Rate Matching-Based Entanglement Transport Protocol in Quantum Networks[J]. IEEE Transactions on Networking, 2024, 33(2): 835-848.
+15. Li Z, Li J, Xue K, et al. NarrowGap: Reducing bottlenecks for end-to-end entanglement distribution in quantum networks[J]. IEEE Transactions on Networking, 2024, 33(1): 162-177.
+16. Liu X, Li R. Quantum Network Routing Design with Dynamic Requests Scheduling in Multi-User Environments[C]//2025 International Wireless Communications and Mobile Computing (IWCMC). IEEE, 2025: 1434-1439.
+17. Chen L, Xue K, Li J, et al. REDP: Reliable entanglement distribution protocol design for large-scale quantum networks[J]. IEEE Journal on Selected Areas in Communications, 2024, 42(7): 1723-1737.
+18. Chen L, Xue K, Li J, et al. Q-DDCA: Decentralized dynamic congestion avoid routing in large-scale quantum networks[J]. IEEE/ACM Transactions on Networking, 2023, 32(1): 368-381.
+19. Yang B, Li Z, Xue K, et al. SwappingBoost: Optimizing entanglement routing by mitigating bottlenecks in quantum networks[C]//2025 International Wireless Communications and Mobile Computing (IWCMC). IEEE, 2025: 1-6.
+20. Li P, Li W. Traffic-Aware Routing Algorithm in Quantum Network[C]//2024 9th International Conference on Computer and Communication Systems (ICCCS). IEEE, 2024: 706-711.
+21. Xiao Z, Li J, Xue K, et al. Purification scheduling control for throughput maximization in quantum networks[J]. Communications Physics, 2024, 7(1): 307.
