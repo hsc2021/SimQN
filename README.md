@@ -28,6 +28,8 @@ SimQN is a Python3 library for quantum networking simulation. It is designed to 
 
 SimQN provides high performance for large-scale network simulation. SimQN uses [Cython](https://cython.org/) to compile critical code in C/C++ libraries to boost the evaluation. Also, along with the commonly used quantum state-based physical models, SimQN provides a higher-layer fidelity-based entanglement physical model to reduce the computation overhead and bring convenience for users in evaluation. Last but not least, SimQN provides several network auxiliary models for easily building network topologies, producing routing tables, and managing multiple session requests.
 
+We have already reproduced several academic papers using SImQN, and the open-source code can be found at [link](https://github.com/QNLab-USTC}
+
 ## Roadmap
 
 ![Roadmap](https://github.com/QNLab-USTC/QuantumNetworkWebsite/blob/main/static/images/simqn_roadmap.png)
