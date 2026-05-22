@@ -1,5 +1,3 @@
-[![Star History Chart](https://api.star-history.com/svg?repos=ertuil/SimQN&type=Date)](https://star-history.com/#ertuil/SimQN&Date)
-
 # SimQN
 [![Pytest](https://github.com/QNLab-USTC/SimQN/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/QNLab-USTC/SimQN/actions/workflows/pytest.yml)
 ![Flake8](https://github.com/QNLab-USTC/SimQN/actions/workflows/flake8.yml/badge.svg)
