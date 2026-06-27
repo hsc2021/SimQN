@@ -130,7 +130,3 @@ class Link_Decoherence_QuantumChannel(QuantumChannel):
             raise ValueError("can not remove fidelity with index None")
         self.entanglement_pool.pop(index)
         # self.bandwidth = self.bandwidth - 1
-
-
-
-
