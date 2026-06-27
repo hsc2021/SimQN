@@ -17,6 +17,7 @@
 
 from qns.entity.node.app import Application
 from qns.entity.qchannel.qchannel import QuantumChannel
+from qns.entity.qchannel.dqchannel import Link_Decoherence_QuantumChannel
 from qns.entity.node.node import QNode
 from typing import Dict, List, Optional, Tuple
 from qns.network.topology import Topology
@@ -29,7 +30,7 @@ class TreeTopology(Topology):
     """
     def __init__(self, nodes_number, children_number: int = 2, nodes_apps: List[Application] = [],
                  qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence=False):
         """
         Args:
             nodes_number (int): the total number of QNodes
@@ -37,6 +38,7 @@ class TreeTopology(Topology):
         """
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
         self.children_number = children_number
+        self.link_decoherence = link_decoherence
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
         nl: List[QNode] = []
@@ -49,7 +51,11 @@ class TreeTopology(Topology):
         for i in range(self.nodes_number):
             for j in range(i * self.children_number + 1, (i + 1) * self.children_number + 1):
                 if j < self.nodes_number:
-                    link = QuantumChannel(name=f"l{i},{j}", **self.qchannel_args)
+                    if self.link_decoherence is False:
+                        link = QuantumChannel(name=f"l{i},{j}", **self.qchannel_args)
+                    else:
+                        link = Link_Decoherence_QuantumChannel(name=f"l{i},{j}", **self.qchannel_args)
+                        link.create_entanglement_pool()
                     ll.append(link)
                     nl[i].add_qchannel(link)
                     nl[j].add_qchannel(link)

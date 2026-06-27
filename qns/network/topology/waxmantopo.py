@@ -17,6 +17,7 @@
 
 from qns.entity.node.app import Application
 from qns.entity.qchannel.qchannel import QuantumChannel
+from qns.entity.qchannel.dqchannel import Link_Decoherence_QuantumChannel
 from qns.entity.node.node import QNode
 from typing import Dict, List, Optional, Tuple
 from qns.network.topology import Topology
@@ -33,7 +34,7 @@ class WaxmanTopology(Topology):
     def __init__(self, nodes_number: int, size: float, alpha: float, beta: float,
                  nodes_apps: List[Application] = [],
                  qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence=False):
         """
         Args:
             nodes_number (int): the number of Qnodes
@@ -45,6 +46,7 @@ class WaxmanTopology(Topology):
         self.size = size
         self.alpha = alpha
         self.beta = beta
+        self.link_decoherence = link_decoherence
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
         max_attempts = 100
@@ -83,7 +85,11 @@ class WaxmanTopology(Topology):
             d = distance_table[(n1, n2)]
             p = self.alpha * np.exp(-d / (self.beta * L))
             if get_rand() < p:
-                link = QuantumChannel(name=f"l{n1}-{n2}", length=d, **self.qchannel_args)
+                if self.link_decoherence is False:
+                    link = QuantumChannel(name=f"l{n1}-{n2}", length=d, **self.qchannel_args)
+                else:
+                    link = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n2}", length=d, **self.qchannel_args)
+                    link.create_entanglement_pool()
                 ll.append(link)
                 n1.add_qchannel(link)
                 n2.add_qchannel(link)
