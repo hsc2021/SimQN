@@ -82,9 +82,9 @@ class BarabasiAlbertTopology(Topology):
                 n1 = nl[0]
                 nl.append(n)
                 if self.link_decoherence is False:
-                    qc = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                    qc = QuantumChannel(name=f"l{n1}-{n}", **self.qchannel_args)
                 else:
-                    qc = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                    qc = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n}", **self.qchannel_args)
                     qc.create_entanglement_pool()
                 ll.append(qc)
                 n1.add_qchannel(qc)
@@ -95,9 +95,9 @@ class BarabasiAlbertTopology(Topology):
             choice_list = get_weighted_choice(nl, weighted_choice, self.new_nodes_egdes)
             for n_i in choice_list:
                 if self.link_decoherence is False:
-                    qc = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                    qc = QuantumChannel(name=f"l{n_i}-{n}", **self.qchannel_args)
                 else:
-                    qc = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                    qc = Link_Decoherence_QuantumChannel(name=f"l{n_i}-{n}", **self.qchannel_args)
                     qc.create_entanglement_pool()
                 ll.append(qc)
                 n.add_qchannel(qc)

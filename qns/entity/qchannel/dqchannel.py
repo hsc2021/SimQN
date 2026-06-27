@@ -15,18 +15,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
 import numpy as np
-
-from qns.entity.entity import Entity
 from qns.entity.node.node import QNode
-from qns.models.delay.constdelay import ConstantDelayModel
 from qns.models.delay.delay import DelayModel
-from qns.simulator.simulator import Simulator
-from qns.simulator.ts import Time
-from qns.simulator.event import Event
-from qns.models.core.backend import QuantumModel
-import qns.utils.log as log
 from qns.utils.rnd import get_rand
 from qns.entity.qchannel.qchannel import QuantumChannel
 
@@ -41,12 +33,13 @@ def calculate_fidelity(init_fidelity: float, storage_time: float, storage_tau: f
 
 class Link_Decoherence_QuantumChannel(QuantumChannel):
     '''
-    Link_Decoherence_QuantumChannel is the channel in which the fidelity of entangled pairs decoherence within the quantum memory.
+    Link_Decoherence_QuantumChannel is the channel in which the fidelity of entangled pairs decoherence
+    within the quantum memory.
     '''
     def __init__(self, name: str = None, node_list: List[QNode] = [], init_fidelity: float = 0.8,
-        bandwidth: int = 1, delay: Union[float, DelayModel] = 0, drop_rate: float = 0,
-        max_buffer_size: int = 0, length: float = 0, decoherence_rate: Optional[float] = 0,
-        transfer_error_model_args: dict = {}, max_storage_time = 0.4, min_storage_time = 0.0):
+                 bandwidth: int = 1, delay: Union[float, DelayModel] = 0, drop_rate: float = 0,
+                 max_buffer_size: int = 0, length: float = 0, decoherence_rate: Optional[float] = 0,
+                 transfer_error_model_args: dict = {}, max_storage_time = 0.4, min_storage_time = 0.0):
 
         """
         Args:
@@ -56,8 +49,8 @@ class Link_Decoherence_QuantumChannel(QuantumChannel):
         """
 
         super().__init__(name=name, node_list=node_list, bandwidth=bandwidth, delay=delay,
-            drop_rate=drop_rate, max_buffer_size=max_buffer_size, length=length, decoherence_rate=decoherence_rate, transfer_error_model_args=transfer_error_model_args
-        )
+                         drop_rate=drop_rate, max_buffer_size=max_buffer_size, length=length,
+                         decoherence_rate=decoherence_rate, transfer_error_model_args=transfer_error_model_args)
 
         self.init_fidelity = init_fidelity
         self.max_storage_time = max_storage_time
