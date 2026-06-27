@@ -17,5 +17,6 @@
 
 from qns.entity.qchannel.qchannel import QuantumChannel, RecvQubitPacket
 from qns.entity.qchannel.losschannel import QubitLossChannel
+from qns.entity.qchannel.dqchannel import Link_Decoherence_QuantumChannel
 
-__all__ = ["QuantumChannel", "QubitLossChannel", "RecvQubitPacket"]
+__all__ = ["QuantumChannel", "QubitLossChannel", "RecvQubitPacket", "Link_Decoherence_QuantumChannel"]

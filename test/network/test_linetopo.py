@@ -7,3 +7,8 @@ def test_line_topo():
     net = QuantumNetwork(topo)
 
     print(net.nodes, net.qchannels)
+
+    topo = LineTopology(nodes_number=5, link_decoherence = True)
+    net = QuantumNetwork(topo)
+
+    print(net.nodes, net.qchannels)

@@ -18,6 +18,7 @@
 import itertools
 from qns.entity.node.app import Application
 from qns.entity.qchannel.qchannel import QuantumChannel
+from qns.entity.qchannel.dqchannel import Link_Decoherence_QuantumChannel
 from qns.entity.node.node import QNode
 from typing import Dict, List, Optional, Tuple
 from qns.network.topology import Topology
@@ -34,7 +35,7 @@ class ErdosRenyiTopology(Topology):
     def __init__(self, nodes_number, generate_prob: float,
                  nodes_apps: List[Application] = [],
                  qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
         """
         Args:
             nodes_number: the number of Qnodes
@@ -42,6 +43,7 @@ class ErdosRenyiTopology(Topology):
         """
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
         self.generate_prob = generate_prob
+        self.link_decoherence = link_decoherence
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
         max_attempts = 100
@@ -63,7 +65,11 @@ class ErdosRenyiTopology(Topology):
         edges = list(itertools.combinations(nl, 2))
         for n1, n2 in edges:
             if get_rand() < self.generate_prob:
-                qc = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                if self.link_decoherence is False:
+                    qc = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                else:
+                    qc = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                    qc.create_entanglement_pool()
                 ll.append(qc)
                 n1.add_qchannel(qc)
                 n2.add_qchannel(qc)

@@ -17,6 +17,7 @@
 
 from qns.entity.node.app import Application
 from qns.entity.qchannel.qchannel import QuantumChannel
+from qns.entity.qchannel.dqchannel import Link_Decoherence_QuantumChannel
 from qns.entity.node.node import QNode
 from typing import Dict, List, Optional, Tuple
 from qns.network.topology import Topology
@@ -30,7 +31,7 @@ class RandomTopology(Topology):
     """
     def __init__(self, nodes_number, lines_number: int, nodes_apps: List[Application] = [],
                  qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
         """
         Args:
             nodes_number: the number of Qnodes
@@ -38,6 +39,7 @@ class RandomTopology(Topology):
         """
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
         self.lines_number = lines_number
+        self.link_decoherence = link_decoherence
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
         max_attempts = 100
@@ -67,7 +69,11 @@ class RandomTopology(Topology):
             mat[idx][i + 1] = 1
             mat[i + 1][idx] = 1
 
-            link = QuantumChannel(name=f"l{idx+1},{i+2}", **self.qchannel_args)
+            if self.link_decoherence is False:
+                link = QuantumChannel(name=f"l{idx+1},{i+2}", **self.qchannel_args)
+            else:
+                link = Link_Decoherence_QuantumChannel(name=f"l{idx+1},{i+2}", **self.qchannel_args)
+                link.create_entanglement_pool()
             ll.append(link)
             pn.add_qchannel(link)
             n.add_qchannel(link)
@@ -83,7 +89,11 @@ class RandomTopology(Topology):
                 mat[b][a] = 1
                 n = nl[a]
                 pn = nl[b]
-                link = QuantumChannel(name=f"l{a+1},{b+1}", **self.qchannel_args)
+                if self.link_decoherence is False:
+                    link = QuantumChannel(name=f"l{a+1},{b+1}", **self.qchannel_args)
+                else:
+                    link = Link_Decoherence_QuantumChannel(name=f"l{a+1},{b+1}", **self.qchannel_args)
+                    link.create_entanglement_pool()
                 ll.append(link)
                 pn.add_qchannel(link)
                 n.add_qchannel(link)

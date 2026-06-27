@@ -18,6 +18,7 @@
 import itertools
 from qns.entity.node.app import Application
 from qns.entity.qchannel.qchannel import QuantumChannel
+from qns.entity.qchannel.dqchannel import Link_Decoherence_QuantumChannel
 from qns.entity.node.node import QNode
 from typing import Dict, List, Optional, Tuple
 from qns.network.topology import Topology
@@ -34,7 +35,7 @@ class DualBarabasiAlbertTopology(Topology):
     def __init__(self, nodes_number, edges_num1: int, edges_num2: int,
                  prob: float, nodes_apps: List[Application] = [],
                  qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
         """
         Args:
             nodes_number: the number of Qnodes
@@ -44,6 +45,7 @@ class DualBarabasiAlbertTopology(Topology):
         self.edges_num1 = edges_num1
         self.edges_num2 = edges_num2
         self.prob = prob
+        self.link_decoherence = link_decoherence
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
         max_attempts = 100
@@ -71,7 +73,11 @@ class DualBarabasiAlbertTopology(Topology):
             nl.append(n)
         initial_edges = list(itertools.combinations(nl, 2))
         for n1, n2 in initial_edges:
-            qc = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+            if self.link_decoherence is False:
+                qc = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+            else:
+                qc = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                qc.create_entanglement_pool()
             ll.append(qc)
             n1.add_qchannel(qc)
             n2.add_qchannel(qc)
@@ -83,7 +89,11 @@ class DualBarabasiAlbertTopology(Topology):
             if node_num == 1 and i == 1:
                 n1 = nl[0]
                 nl.append(n1)
-                qc = QuantumChannel(name=f"l{n1}-{n}", **self.qchannel_args)
+                if self.link_decoherence is False:
+                    qc = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                else:
+                    qc = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                    qc.create_entanglement_pool()
                 ll.append(qc)
                 n1.add_qchannel(qc)
                 n.add_qchannel(qc)
@@ -95,7 +105,11 @@ class DualBarabasiAlbertTopology(Topology):
                 weighted_choice = [len(n_i.qchannels) for n_i in nl]
                 choice_list = get_weighted_choice(nl, weighted_choice, self.edges_num2)
             for n_i in choice_list:
-                qc = QuantumChannel(name=f"l{n_i}-{n}", **self.qchannel_args)
+                if self.link_decoherence is False:
+                    qc = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                else:
+                    qc = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                    qc.create_entanglement_pool()
                 ll.append(qc)
                 n.add_qchannel(qc)
                 n_i.add_qchannel(qc)

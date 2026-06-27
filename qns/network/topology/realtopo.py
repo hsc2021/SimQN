@@ -1,5 +1,6 @@
 from qns.entity.node.app import Application
 from qns.entity.qchannel.qchannel import QuantumChannel
+from qns.entity.qchannel.dqchannel import Link_Decoherence_QuantumChannel
 from qns.entity.node.node import QNode
 from typing import Dict, List, Optional, Tuple
 from qns.network.topology import Topology
@@ -12,8 +13,9 @@ class AboveNetTopology(Topology):
     AboveNet Topology class for quantum networks.
     """
     def __init__(self, nodes_number=10, nodes_apps: List[Application] = [], qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
+        self.link_decoherence = link_decoherence
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
         """Build the random topology.
@@ -32,7 +34,11 @@ class AboveNetTopology(Topology):
         for edge in edges:
             n1 = nl[edge[0]]
             n2 = nl[edge[1]]
-            channel = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+            if self.link_decoherence is False:
+                channel = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+            else:
+                channel = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                channel.create_entanglement_pool()
             ll.append(channel)
             n1.add_qchannel(channel)
             n2.add_qchannel(channel)
@@ -46,8 +52,9 @@ class AGISTopology(Topology):
     AGIST Topology class for quantum networks.
     """
     def __init__(self, nodes_number=10, nodes_apps: List[Application] = [], qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
+        self.link_decoherence = link_decoherence
 
     def build(self) -> Tuple[List[QNode], List[QuantumChannel]]:
         nl = []
@@ -61,7 +68,11 @@ class AGISTopology(Topology):
         for edge in edges:
             n1 = nl[edge[0]]
             n2 = nl[edge[1]]
-            channel = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+            if self.link_decoherence is False:
+                channel = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+            else:
+                channel = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                channel.create_entanglement_pool()
             ll.append(channel)
             n1.add_qchannel(channel)
             n2.add_qchannel(channel)
@@ -79,7 +90,8 @@ class GMLTopology(Topology):
                  nodes_apps: List = [],
                  qchannel_args: Dict = {},
                  cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}):
+                 memory_args: Optional[List[Dict]] = {},
+                 link_decoherence = False):
 
         self.file_path = file_path
         if not os.path.exists(self.file_path):
@@ -93,6 +105,7 @@ class GMLTopology(Topology):
         nodes_number = len(self.gml_nodes)
 
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
+        self.link_decoherence = link_decoherence
 
     def _parse_gml_manually(self):
 
@@ -131,7 +144,11 @@ class GMLTopology(Topology):
             if src_id in id_to_qnode and tgt_id in id_to_qnode:
                 n1 = id_to_qnode[src_id]
                 n2 = id_to_qnode[tgt_id]
-                channel = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                if self.link_decoherence is False:
+                    channel = QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                else:
+                    channel = Link_Decoherence_QuantumChannel(name=f"l{n1}-{n2}", **self.qchannel_args)
+                    channel.create_entanglement_pool()
                 ll.append(channel)
 
                 n1.add_qchannel(channel)
