@@ -13,7 +13,7 @@ class AboveNetTopology(Topology):
     AboveNet Topology class for quantum networks.
     """
     def __init__(self, nodes_number=10, nodes_apps: List[Application] = [], qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence=False):
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
         self.link_decoherence = link_decoherence
 
@@ -52,7 +52,7 @@ class AGISTopology(Topology):
     AGIST Topology class for quantum networks.
     """
     def __init__(self, nodes_number=10, nodes_apps: List[Application] = [], qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence=False):
         super().__init__(nodes_number, nodes_apps, qchannel_args, cchannel_args, memory_args)
         self.link_decoherence = link_decoherence
 
@@ -91,7 +91,7 @@ class GMLTopology(Topology):
                  qchannel_args: Dict = {},
                  cchannel_args: Dict = {},
                  memory_args: Optional[List[Dict]] = {},
-                 link_decoherence = False):
+                 link_decoherence=False):
 
         self.file_path = file_path
         if not os.path.exists(self.file_path):

@@ -8,8 +8,9 @@ def test_erdosrenyi_topo():
 
     print(net.nodes, net.qchannels)
 
-    topo = ErdosRenyiTopology(nodes_number=20, generate_prob=0.2, link_decoherence = True)
+    topo = ErdosRenyiTopology(nodes_number=20, generate_prob=0.2, link_decoherence=True)
     net = QuantumNetwork(topo)
 
     print(net.nodes, net.qchannels)
+
 

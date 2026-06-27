@@ -34,7 +34,7 @@ class WaxmanTopology(Topology):
     def __init__(self, nodes_number: int, size: float, alpha: float, beta: float,
                  nodes_apps: List[Application] = [],
                  qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence=False):
         """
         Args:
             nodes_number (int): the number of Qnodes

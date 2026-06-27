@@ -39,7 +39,7 @@ class Link_Decoherence_QuantumChannel(QuantumChannel):
     def __init__(self, name: str = None, node_list: List[QNode] = [], init_fidelity: float = 0.8,
                  bandwidth: int = 1, delay: Union[float, DelayModel] = 0, drop_rate: float = 0,
                  max_buffer_size: int = 0, length: float = 0, decoherence_rate: Optional[float] = 0,
-                 transfer_error_model_args: dict = {}, max_storage_time = 0.4, min_storage_time = 0.0):
+                 transfer_error_model_args: dict = {}, max_storage_time=0.4, min_storage_time=0.0):
 
         """
         Args:
@@ -95,7 +95,7 @@ class Link_Decoherence_QuantumChannel(QuantumChannel):
             if np.isclose(self.entanglement_pool[i][0], fidelity):
                 return i
         return None
-    
+
     def find_max_min_fidelity(self):
         """
         Find the entanglement pairs with maximum and minimum fidelity.
@@ -111,13 +111,13 @@ class Link_Decoherence_QuantumChannel(QuantumChannel):
                 min_fidelity = self.entanglement_pool[i][0]
                 min_index = i
         return max_index, min_index
-    
+
     def remove_entanglement_by_fidelity(self, fidelity):
         """
         Remove the entanglement pair whose fidelity is equal to the specified fidelity.
         """
         index = self.find_fidlity_index(fidelity)
-        if index == None:
+        if index is None:
             raise ValueError("can not remove fidelity with index None")
         self.entanglement_pool.pop(index)
         # self.bandwidth = self.bandwidth - 1
@@ -126,9 +126,10 @@ class Link_Decoherence_QuantumChannel(QuantumChannel):
         """
         Remove the entanglement pair whose fidelity is equal to the specified index.
         """
-        if index == None:
+        if index is None:
             raise ValueError("can not remove fidelity with index None")
         self.entanglement_pool.pop(index)
         # self.bandwidth = self.bandwidth - 1
+
 
 

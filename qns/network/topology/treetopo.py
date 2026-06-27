@@ -30,7 +30,7 @@ class TreeTopology(Topology):
     """
     def __init__(self, nodes_number, children_number: int = 2, nodes_apps: List[Application] = [],
                  qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence=False):
         """
         Args:
             nodes_number (int): the total number of QNodes

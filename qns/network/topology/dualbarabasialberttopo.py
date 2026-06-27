@@ -35,7 +35,7 @@ class DualBarabasiAlbertTopology(Topology):
     def __init__(self, nodes_number, edges_num1: int, edges_num2: int,
                  prob: float, nodes_apps: List[Application] = [],
                  qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence=False):
         """
         Args:
             nodes_number: the number of Qnodes

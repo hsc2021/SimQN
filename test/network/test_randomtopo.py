@@ -8,7 +8,7 @@ def test_random_topo():
 
     print(net.nodes, net.qchannels)
 
-    topo = RandomTopology(nodes_number=5, lines_number=10, link_decoherence = True)
+    topo = RandomTopology(nodes_number=5, lines_number=10, link_decoherence=True)
     net = QuantumNetwork(topo)
 
     print(net.nodes, net.qchannels)

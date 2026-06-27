@@ -8,7 +8,7 @@ def test_waxman_topo():
 
     print(net.nodes, net.qchannels)
 
-    topo = WaxmanTopology(nodes_number=10, size=1000, alpha=0.5, beta=0.5, link_decoherence = True)
+    topo = WaxmanTopology(nodes_number=10, size=1000, alpha=0.5, beta=0.5, link_decoherence=True)
     net = QuantumNetwork(topo)
 
     print(net.nodes, net.qchannels)

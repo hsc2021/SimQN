@@ -29,7 +29,7 @@ class LineTopology(Topology):
     """
     def __init__(self, nodes_number, nodes_apps: List[Application] = [],
                  qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence=False):
         super().__init__(nodes_number, nodes_apps=nodes_apps,
                          qchannel_args=qchannel_args, cchannel_args=cchannel_args,
                          memory_args=memory_args)

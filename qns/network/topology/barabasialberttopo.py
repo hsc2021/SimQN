@@ -35,7 +35,7 @@ class BarabasiAlbertTopology(Topology):
     def __init__(self, nodes_number, new_nodes_egdes: int,
                  nodes_apps: List[Application] = [],
                  qchannel_args: Dict = {}, cchannel_args: Dict = {},
-                 memory_args: Optional[List[Dict]] = {}, link_decoherence = False):
+                 memory_args: Optional[List[Dict]] = {}, link_decoherence=False):
         """
         Args:
             nodes_number: the number of Qnodes
