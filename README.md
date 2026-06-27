@@ -28,6 +28,17 @@ SimQN provides high performance for large-scale network simulation. SimQN uses [
 
 We have already reproduced several academic papers using SImQN, and the open-source code can be found at our group [website](https://github.com/QNLab-USTC).
 
+## News
+
+* **Version Update:** SimQN v0.2.3 has been released in June 2026.
+
+* **Academic Adoption:** SimQN has been used as the simulation platform in **21 academic papers**.
+
+* **Platform Extension:** **3 simulation platforms or system extensions** have been developed based on SimQN.
+
+For more details, please refer to [Release History](#release-history), [Platform Extension](#platform-extension), and [Academic Paper Using SimQN for Simulation](#academic-paper-using-simqn-for-simulation).
+
+
 ## Roadmap
 
 ![Roadmap](https://github.com/QNLab-USTC/QuantumNetworkWebsite/blob/main/static/images/simqn_roadmap.png)
