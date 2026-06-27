@@ -1,5 +1,3 @@
-[![Star History Chart](https://api.star-history.com/svg?repos=ertuil/SimQN&type=Date)](https://star-history.com/#ertuil/SimQN&Date)
-
 # SimQN
 [![Pytest](https://github.com/QNLab-USTC/SimQN/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/QNLab-USTC/SimQN/actions/workflows/pytest.yml)
 ![Flake8](https://github.com/QNLab-USTC/SimQN/actions/workflows/flake8.yml/badge.svg)
@@ -27,6 +25,8 @@ SimQN enables large-scale investigations, including QKD protocols, entanglement 
 SimQN is a Python3 library for quantum networking simulation. It is designed to be general purpose. It means that SimQN can be used for both QKD networks, entanglement distribution networks, and other kinds of quantum networks' evaluation. The core idea is that SimQN makes no architecture assumption. Since there is currently no recognized network architecture in quantum network investigations, SimQN stays flexible in this aspect.
 
 SimQN provides high performance for large-scale network simulation. SimQN uses [Cython](https://cython.org/) to compile critical code in C/C++ libraries to boost the evaluation. Also, along with the commonly used quantum state-based physical models, SimQN provides a higher-layer fidelity-based entanglement physical model to reduce the computation overhead and bring convenience for users in evaluation. Last but not least, SimQN provides several network auxiliary models for easily building network topologies, producing routing tables, and managing multiple session requests.
+
+We have already reproduced several academic papers using SImQN, and the open-source code can be found at our group [website](https://github.com/QNLab-USTC).
 
 ## Roadmap
 
