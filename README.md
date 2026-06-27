@@ -142,10 +142,10 @@ Here is an example of using SimQN.
 
 ## Release History
 
-- v0.2.3(Released 2026.05)
+- v0.2.3(Released 2026.06)
   - *New funcation!!!*
   - Simulator Core: StableEventPool with Heap-Based Event Scheduling.
-  - Network Utilities: Dijkstra Routing with Binary Heap, ClassicChannel Extension for Reliable Packet Delivery and Ordering.
+  - Network Utilities: Dijkstra Routing with Binary Heap, ClassicChannel Extension for Reliable Packet Delivery and Ordering, Link-decoherence quantum channel with differentiated link fidelity.
 
 - v0.2.2(Released 2026.01)
   - *New functions!!!*
