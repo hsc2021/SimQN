@@ -12,5 +12,3 @@ def test_erdosrenyi_topo():
     net = QuantumNetwork(topo)
 
     print(net.nodes, net.qchannels)
-
-
